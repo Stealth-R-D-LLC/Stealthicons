@@ -440,7 +440,7 @@
       <span id="grindmeta">—</span>
     </div>
     <div id="grind" class="st-grind"></div>
-    <p class="pw-note">The mark is seeded from a single 128-bit slice of the digest, so however much variety a generator would spend, the count can never exceed 2<sup>128</sup> — which the 13×13 reaches and the 8×8 nearly does. Past that point a larger grid buys detail, not distinctness.</p>
+    <p class="pw-note">The mark is seeded from a single 128-bit slice of the digest, so however much variety a generator would spend, the count can never exceed 2<sup>128</sup> — which the rectilinear 8×8 already reaches and the hexagonal 8×8 comes within range of. Past that point a larger grid buys detail, not distinctness.</p>
     <p class="pw-note">A forger needs an address whose stealthicon passes for yours: the same name, and a mark close enough to fool a glance. The name and the mark are independent draws from the same digest, so their bits add. Each attempt costs one full Argon2d evaluation — timed in this browser, on this machine — and the memory cost is what stops that being parallelised away cheaply: at the current setting every lane needs its own working memory, so an attacker buys lanes with RAM rather than with cores.</p>
   </section>
 

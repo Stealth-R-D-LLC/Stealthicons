@@ -151,13 +151,13 @@ combinations whose dots wouldn't clear it are **filtered out**, not altered. Poo
 Both generators tally entropy exactly as they run — `H(p)` per Bernoulli decision, `log₂(k)` per
 uniform choice — rather than estimating it. Averaged over 48 runs, cached per settings signature:
 
-| lattice | 4×4 | 5×5 | 8×8 | 13×13 |
+| lattice | 4×4 | 5×5 | 6×6 | 8×8 |
 |---|---|---|---|---|
-| hexagonal | 32 | 49 | 111 | **128** |
-| rectilinear | 32 | 48 | **128** | **128** |
+| hexagonal | 32 | 49 | 65 | 111 |
+| rectilinear | 32 | 48 | 67 | **128** |
 
-**Bold values are capped by the 128-bit seed, not by the generator.** A 13×13 would spend 274 bits
-(hex) or 535 (rect) if it had them. Beyond 8×8 a bigger grid buys detail, not distinctness.
+**Bold values are capped by the 128-bit seed, not by the generator.** Beyond 8×8 a bigger grid buys
+detail, not distinctness — 8×8 is the largest size the page offers.
 
 The bit ledger makes the whole budget visible: of 256 digest bits, ~19 go to the name, 128 seed the
 mark, and **108 are never read**.
@@ -191,8 +191,8 @@ parallelism is bought with RAM rather than cores — but the page only states th
 ```
 hash    Argon2d, 16384 KiB, 8 passes, salt stealthicons-v1
 name    letters=full, capitalize=off
-mark    lattice=hexagonal, shape=circle, sizes 4/5/8/13
-        dot diameter 0.7, waist 1 (ideal on, so 0.617 is what's used), corner radius 1.45
+mark    lattice=hexagonal, shape=circle, sizes 4/5/6/8
+        dot diameter 0.7, waist 1, ideal off, corner radius 1.45
         density 0.75, persistence 2, max chain 6, closure 0.5, spot share 0.5
         third colour on, fill triangles on, face-like off
         transparent off, on-dark off, mesh on
@@ -261,7 +261,7 @@ not just the one you changed.
 2. **Grind figure** — express parallelism in RAM, not cores (§7).
 3. **Salt** — `stealthicons-v1` is versioned; settle the policy for a v2.
 4. **Favicon guidance** — measured floor is ~3 pixels per cell: 4×4 and 5×5 survive 16 px, 8×8 is
-   the boundary at 32 px, 13×13 wants 48 px or more. Not yet stated on the page.
+   the boundary at 32 px. Not yet stated on the page.
 5. **Reference implementation** — the page is the only spec. A second implementation would be the
    real test of whether §2–§4 are written precisely enough.
 6. **Rectilinear sunset** — was slated for removal, then kept for its charm. Still carries
