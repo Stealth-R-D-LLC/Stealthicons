@@ -99,6 +99,7 @@
     display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
     color:var(--muted);cursor:pointer;margin-top:8px;
   }
+  .lower-toggle[hidden]{display:none}
   .lower-toggle input{accent-color:var(--cons);width:14px;height:14px;cursor:pointer}
 
   .memo-row{
@@ -395,7 +396,7 @@
 
       el.iconRow.innerHTML =
         tileMarkup("tileOriginal", "Original", origMark.svg) +
-        (showBoth && lowerMark ? tileMarkup("tileLower", "Lowercase-enforced", lowerMark.svg) : "");
+        (showBoth && lowerMark ? tileMarkup("tileLower", "Lowercase", lowerMark.svg) : "");
       if (!showBoth || !lowerMark) el.iconRow.querySelector(".tile").classList.add("solo");
       wireTileButtons(document.getElementById("tileOriginal"), origMark.svg, "original");
       if (showBoth && lowerMark) wireTileButtons(document.getElementById("tileLower"), lowerMark.svg, "lowercase");
