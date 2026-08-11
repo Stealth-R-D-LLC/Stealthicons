@@ -79,7 +79,9 @@ text ──▶ digest ──┬─▶ bits 0..18   ──▶ name (5 letters)
 `stealthicons-v1`. SHA-1/256/384/512 are also available via Web Crypto for comparison, though
 Argon2d is what a conforming implementation uses. The salt is fixed deliberately: a stealthicon
 must be a pure function of its address, so there is nothing per-user to vary, and the cost
-parameters carry the defence.
+parameters carry the defence. hash-wasm's Argon2d rejects a literal empty password outright, so
+the empty string is canonically mapped to a single space before hashing — arbitrary, but fixed,
+so "no text yet" still resolves to a real stealthicon rather than an error.
 
 **Name.** Repeated `divmod` off the low end of the first 64-bit window: one bit picks vowel-first
 or consonant-first, then five indices into a consonant set and a vowel set. Two alphabets — `b58`
