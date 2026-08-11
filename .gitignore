@@ -1,6 +1,7 @@
 # superseded prototype, kept locally for reference only (see HANDOFF.md)
 _legacy
 _bak
+_blockies
 
 # OS / editor
 .DS_Store
@@ -10,7 +11,8 @@ _bak
 node_modules/
 
 # bu
-_buignor
+_buignore
+
 
 # vim backup
 *~

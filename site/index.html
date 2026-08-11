@@ -26,35 +26,28 @@
     background:var(--paper);color:var(--ink);font-family:var(--sans);
     font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
   }
-  .shell{max-width:640px;margin:0 auto;padding:48px 24px 72px}
+  .shell{max-width:640px;margin:0 auto;padding:32px 24px 72px}
 
-  /* ---- masthead ---- */
-  .eyebrow{
-    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--muted);margin:0 0 10px;
-  }
-  h1{
-    font-family:var(--display);font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1;
-    letter-spacing:.01em;margin:0 0 10px;
-  }
-  .tagline{
-    font-family:var(--display);font-size:clamp(16px,2.2vw,19px);line-height:1.35;
-    color:var(--muted);margin:0 0 26px;max-width:52ch;
+  /* ---- minimal header ---- */
+  .brand{
+    font-family:var(--mono);font-weight:600;font-size:15px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink);margin:0 0 22px;
   }
 
-  /* ---- input ---- */
-  .field{margin-bottom:10px}
+  /* ---- inputs ---- */
+  .field{margin-bottom:12px}
   .label{
     display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--muted);margin-bottom:8px;
   }
   .input{
-    width:100%;min-height:78px;resize:vertical;background:var(--panel);color:var(--ink);
-    border:1px solid var(--rule);border-radius:2px;padding:13px 15px;
-    font-family:var(--mono);font-size:15px;line-height:1.5;
+    width:100%;background:var(--panel);color:var(--ink);
+    border:1px solid var(--rule);border-radius:2px;padding:11px 13px;
+    font-family:var(--mono);font-size:14px;line-height:1.5;
   }
+  textarea.input{min-height:66px;resize:vertical}
   .input:focus{outline:2px solid var(--cons);outline-offset:2px;border-color:var(--cons)}
-  .field-actions{display:flex;justify-content:flex-end;margin:8px 0 36px}
+  .field-actions{display:flex;justify-content:flex-end;margin:8px 0 28px}
   .btn{
     font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
     background:none;border:1px solid var(--rule);border-radius:2px;color:var(--muted);
@@ -62,6 +55,7 @@
   }
   .btn:hover{border-color:var(--cons);color:var(--cons)}
   .btn:focus-visible{outline:2px solid var(--cons);outline-offset:2px}
+  .btn.primary{border-color:var(--cons);color:var(--cons)}
   .mini-btn{
     font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
     background:none;border:1px solid var(--rule-soft);border-radius:2px;color:var(--muted);
@@ -72,12 +66,25 @@
 
   /* ---- empty state ---- */
   .empty{
-    border-top:1px solid var(--rule);padding-top:26px;color:var(--muted);
-    font-family:var(--mono);font-size:13px;
+    border:1px dashed var(--rule);border-radius:18px;padding:40px 20px;
+    color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;
   }
 
-  /* ---- result ---- */
-  .result{border-top:1px solid var(--rule);padding-top:30px}
+  /* ---- the compact panel ---- */
+  .panel-wrap{margin-bottom:14px}
+  .panel-card{
+    border-radius:18px;overflow:hidden;box-shadow:0 1px 3px rgba(16,30,42,.08);
+    max-width:420px;margin:0 auto;
+  }
+  .panel-card svg{display:block;width:100%;height:auto}
+  .panel-actions{display:flex;justify-content:center;gap:8px;margin-top:12px}
+
+  /* ---- detail section ---- */
+  .detail{border-top:1px solid var(--rule);padding-top:30px;margin-top:44px}
+  .detail-head{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 20px;
+  }
   .stage{width:min(380px,100%)}
 
   .icon-row{display:flex;gap:16px;margin-bottom:10px}
@@ -102,16 +109,16 @@
   .lower-toggle[hidden]{display:none}
   .lower-toggle input{accent-color:var(--cons);width:14px;height:14px;cursor:pointer}
 
-  .memo-row{
+  .name-row{
     display:flex;align-items:baseline;justify-content:space-between;gap:14px;
     margin-top:26px;
   }
-  .memo{
+  .name-value{
     font-family:var(--display);font-weight:700;letter-spacing:-.01em;
     font-size:clamp(28px,7vw,42px);line-height:1;
   }
-  .memo .v{color:var(--vowel)}
-  .memo .c{color:var(--cons)}
+  .name-value .v{color:var(--vowel)}
+  .name-value .c{color:var(--cons)}
   .row-actions{display:flex;gap:6px;flex:0 0 auto}
 
   .address-row{
@@ -123,18 +130,6 @@
     word-break:break-all;min-width:0;
   }
 
-  .legend{
-    margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);
-    font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.9;
-  }
-  .legend dt{color:var(--ink);display:inline;font-weight:600}
-  .legend dt::after{content:" — "}
-  .legend dd{display:inline;margin:0}
-  .legend .item{margin-bottom:2px}
-  .swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
-  .swatch.v{background:var(--vowel)}
-  .swatch.c{background:var(--cons)}
-
   .flash{color:var(--cons) !important;border-color:var(--cons) !important}
 
   footer{
@@ -145,8 +140,8 @@
   footer a:hover{color:var(--cons)}
 
   @media (max-width:480px){
-    .shell{padding:32px 16px 56px}
-    .memo-row,.address-row{flex-direction:column;align-items:flex-start}
+    .shell{padding:24px 16px 56px}
+    .name-row,.address-row{flex-direction:column;align-items:flex-start}
     .row-actions{flex-direction:row}
   }
 </style>
@@ -154,12 +149,12 @@
 <body>
 <div class="shell">
 
-  <p class="eyebrow">Stealthicons</p>
-  <h1>A name and a mark for your address</h1>
-  <p class="tagline">Paste an address (or any text) and get back a five-letter name you can say
-    aloud and an identicon you can recognise at a glance — both computed only from what you typed,
-    nothing stored, nothing sent anywhere.</p>
+  <p class="brand">Stealthicons</p>
 
+  <div class="field">
+    <label class="label" for="memo">Memo <span style="text-transform:none">(optional note — not part of the hash)</span></label>
+    <input class="input" type="text" id="memo" spellcheck="false" placeholder="e.g. &quot;cold wallet&quot; — for your own reference">
+  </div>
   <div class="field">
     <label class="label" for="src">Address or text</label>
     <textarea class="input" id="src" spellcheck="false" placeholder="paste an address, or type anything"></textarea>
@@ -170,7 +165,16 @@
 
   <p class="empty" id="empty">Waiting for text.</p>
 
-  <div class="result" id="result" hidden>
+  <div class="panel-wrap" id="panelWrap" hidden>
+    <div class="panel-card" id="panelCard"></div>
+    <div class="panel-actions">
+      <button class="btn primary" id="panelCopy" type="button">Copy image</button>
+      <button class="btn primary" id="panelSave" type="button">Save image</button>
+    </div>
+  </div>
+
+  <div class="detail" id="detail" hidden>
+    <p class="detail-head">Individual pieces</p>
     <div class="stage">
       <div class="icon-row" id="iconRow"></div>
       <p class="alphabet-note" id="alphabetNote"></p>
@@ -178,11 +182,11 @@
         <input type="checkbox" id="lowerToggle"> Show the lowercase-enforced mark too
       </label>
 
-      <div class="memo-row">
-        <span class="memo" id="memoText"></span>
+      <div class="name-row">
+        <span class="name-value" id="nameText"></span>
         <div class="row-actions">
-          <button class="btn" id="memoCopy" type="button">Copy</button>
-          <button class="btn" id="memoSave" type="button">Save</button>
+          <button class="btn" id="nameCopy" type="button">Copy</button>
+          <button class="btn" id="nameSave" type="button">Save</button>
         </div>
       </div>
 
@@ -194,18 +198,6 @@
         </div>
       </div>
     </div>
-
-    <dl class="legend">
-      <div class="item"><dt>Name</dt><dd>five letters, alternating <span class="swatch v"></span>vowel
-        and <span class="swatch c"></span>consonant, derived from the same hash as the mark — say it
-        aloud to compare two addresses without reading either one in full.</dd></div>
-      <div class="item"><dt>Mark</dt><dd>a symmetric identicon, also derived from the hash — the
-        official size is 8×8.</dd></div>
-      <div class="item"><dt>Original</dt><dd>the mark for your text exactly as typed.</dd></div>
-      <div class="item"><dt>Lowercase-enforced</dt><dd>the mark for your text with every letter
-        forced to lowercase first — shown alongside the original when the address format doesn't
-        clearly make case meaningful, as a hedge against a transcription that changed case.</dd></div>
-    </dl>
   </div>
 
   <footer>
@@ -224,17 +216,22 @@
   "use strict";
 
   var el = {
+    memo: document.getElementById("memo"),
     src: document.getElementById("src"),
     example: document.getElementById("example"),
     empty: document.getElementById("empty"),
-    result: document.getElementById("result"),
+    panelWrap: document.getElementById("panelWrap"),
+    panelCard: document.getElementById("panelCard"),
+    panelCopy: document.getElementById("panelCopy"),
+    panelSave: document.getElementById("panelSave"),
+    detail: document.getElementById("detail"),
     iconRow: document.getElementById("iconRow"),
     alphabetNote: document.getElementById("alphabetNote"),
     lowerToggleWrap: document.getElementById("lowerToggleWrap"),
     lowerToggle: document.getElementById("lowerToggle"),
-    memoText: document.getElementById("memoText"),
-    memoCopy: document.getElementById("memoCopy"),
-    memoSave: document.getElementById("memoSave"),
+    nameText: document.getElementById("nameText"),
+    nameCopy: document.getElementById("nameCopy"),
+    nameSave: document.getElementById("nameSave"),
     addressText: document.getElementById("addressText"),
     addrCopy: document.getElementById("addrCopy"),
     addrSave: document.getElementById("addrSave")
@@ -312,13 +309,13 @@
     );
   }
 
-  function svgToPngBlob(svg, px){
+  function svgToPngBlob(svg, w, h){
     return new Promise(function(resolve, reject){
       var img = new Image();
       img.onload = function(){
         var canvas = document.createElement("canvas");
-        canvas.width = canvas.height = px;
-        canvas.getContext("2d").drawImage(img, 0, 0, px, px);
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
         canvas.toBlob(function(blob){ blob ? resolve(blob) : reject(new Error("toBlob failed")); }, "image/png");
       };
       img.onerror = function(){ reject(new Error("image load failed")); };
@@ -336,7 +333,7 @@
         flash(btn, "Saved");
         return;
       }
-      svgToPngBlob(sized, 512).then(function(blob){
+      svgToPngBlob(sized, 512, 512).then(function(blob){
         if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
           return navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })])
             .then(function(){ flash(btn, "Copied"); },
@@ -348,13 +345,157 @@
     });
   }
 
+  // ---- compact panel: a single flattened SVG combining memo, mark(s), name
+  // and address, so it can be copied/saved as one image (replacing a manual
+  // screen capture). What's on screen is exactly what gets exported.
+  var PCOLOR = {
+    panelBg: "#F5F7FA", ink: "#101E2A", muted: "#5E7180",
+    rule: "#C3CDD6", vowel: "#A85D06", cons: "#0C6068"
+  };
+  var PMONO = "ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace";
+  var PDISPLAY = "Helvetica,'Helvetica Neue',Arial,'Liberation Sans',sans-serif";
+
+  function escapeXml(s){
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function svgText(x, y, str, opts){
+    opts = opts || {};
+    var attrs = 'x="' + x + '" y="' + y + '" text-anchor="' + (opts.anchor || "middle") + '" ' +
+      'font-family="' + (opts.family || PMONO) + '" font-size="' + (opts.size || 13) + '" ' +
+      'font-weight="' + (opts.weight || 400) + '" fill="' + (opts.color || PCOLOR.ink) + '"';
+    if (opts.spacing) attrs += ' letter-spacing="' + opts.spacing + '"';
+    return "<text " + attrs + ">" + escapeXml(str) + "</text>";
+  }
+
+  function svgNameText(x, y, letters, size){
+    var spans = letters.map(function(L){
+      return '<tspan fill="' + (L.vowel ? PCOLOR.vowel : PCOLOR.cons) + '">' + escapeXml(L.ch) + "</tspan>";
+    }).join("");
+    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-family="' + PDISPLAY + '" ' +
+      'font-weight="700" font-size="' + size + '" letter-spacing="-1">' + spans + "</text>";
+  }
+
+  function embedIconSvg(svg, x, y, size){
+    var vb = (svg.match(/viewBox="([^"]+)"/) || [null, "0 0 8 8"])[1];
+    var inner = svg.replace(/^<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
+    return '<svg x="' + x + '" y="' + y + '" width="' + size + '" height="' + size + '" viewBox="' + vb + '">' + inner + "</svg>";
+  }
+
+  function wrapMonospace(str, maxWidth, fontSize, maxLines){
+    var charW = fontSize * 0.62;
+    var perLine = Math.max(4, Math.floor(maxWidth / charW));
+    var lines = [];
+    for (var i = 0; i < str.length && (!maxLines || lines.length < maxLines); i += perLine){
+      lines.push(str.slice(i, i + perLine));
+    }
+    if (maxLines && str.length > perLine * maxLines){
+      var last = lines[lines.length - 1];
+      lines[lines.length - 1] = last.slice(0, Math.max(0, last.length - 1)) + "…";
+    }
+    return lines.length ? lines : [""];
+  }
+
+  function buildPanelSvg(state){
+    var W = 512, PAD = 34, contentW = W - PAD * 2;
+    var y = 42;
+    var parts = [];
+
+    parts.push(svgText(W / 2, y, "STEALTHICONS", { size: 14, color: PCOLOR.muted, weight: 600, spacing: 3 }));
+    y += 30;
+
+    if (state.memo){
+      parts.push(svgText(W / 2, y, "MEMO", { size: 10, color: PCOLOR.muted, weight: 600, spacing: 1.5 }));
+      y += 20;
+      wrapMonospace(state.memo, contentW, 17, 2).forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: 17, color: PCOLOR.ink, family: PDISPLAY }));
+        y += 22;
+      });
+      y += 12;
+    }
+
+    if (state.showBoth && state.lowerSvg){
+      var iconSize = 188, gap = 22;
+      var totalW = iconSize * 2 + gap;
+      var xLeft = (W - totalW) / 2, xRight = xLeft + iconSize + gap;
+      parts.push(embedIconSvg(state.origSvg, xLeft, y, iconSize));
+      parts.push(embedIconSvg(state.lowerSvg, xRight, y, iconSize));
+      y += iconSize + 18;
+      parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 10, color: PCOLOR.muted, spacing: 1 }));
+      parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 10, color: PCOLOR.muted, spacing: 1 }));
+      y += 32;
+    } else {
+      var size = 292;
+      var x = (W - size) / 2;
+      parts.push(embedIconSvg(state.origSvg, x, y, size));
+      y += size + 32;
+    }
+
+    parts.push(svgText(W / 2, y, "NAME", { size: 10, color: PCOLOR.muted, weight: 600, spacing: 1.5 }));
+    y += 26;
+    parts.push(svgNameText(W / 2, y, state.letters, 40));
+    y += 38;
+
+    wrapMonospace(state.address, contentW, 18, 4).forEach(function(line){
+      parts.push(svgText(W / 2, y, line, { size: 18, color: PCOLOR.ink }));
+      y += 24;
+    });
+    y += PAD - 10;
+
+    var H = Math.round(y);
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + " " + H + '" role="img">' +
+      '<rect width="' + W + '" height="' + H + '" rx="18" fill="' + PCOLOR.panelBg + '"/>' +
+      '<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="' + (H - 1) + '" rx="17.5" fill="none" stroke="' + PCOLOR.rule + '"/>' +
+      parts.join("") + "</svg>";
+  }
+
+  var currentPanelSvg = null;
+
+  function renderPanel(origMark, lowerMark, showBoth, letters, memo, address){
+    currentPanelSvg = buildPanelSvg({
+      origSvg: origMark.svg,
+      lowerSvg: lowerMark ? lowerMark.svg : null,
+      showBoth: showBoth,
+      letters: letters,
+      memo: memo,
+      address: address
+    });
+    el.panelCard.innerHTML = currentPanelSvg;
+  }
+
+  el.panelCopy.addEventListener("click", function(){
+    if (!currentPanelSvg) return;
+    var m = currentPanelSvg.match(/viewBox="0 0 (\d+) (\d+)"/);
+    var w = +m[1], h = +m[2], scale = 2;
+    svgToPngBlob(currentPanelSvg, w * scale, h * scale).then(function(blob){
+      if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+        return navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })])
+          .then(function(){ flash(el.panelCopy, "Copied"); },
+                function(){ download(blob, "stealthicons-card.png"); flash(el.panelCopy, "Saved"); });
+      }
+      download(blob, "stealthicons-card.png");
+      flash(el.panelCopy, "Saved");
+    }).catch(function(){ flash(el.panelCopy, "Failed"); });
+  });
+
+  el.panelSave.addEventListener("click", function(){
+    if (!currentPanelSvg) return;
+    var m = currentPanelSvg.match(/viewBox="0 0 (\d+) (\d+)"/);
+    var w = +m[1], h = +m[2], scale = 2;
+    svgToPngBlob(currentPanelSvg, w * scale, h * scale).then(function(blob){
+      download(blob, "stealthicons-card.png");
+      flash(el.panelSave, "Saved");
+    }).catch(function(){ flash(el.panelSave, "Failed"); });
+  });
+
   // ---- main render ----
   var run = 0;
 
   function render(text){
     var myRun = ++run;
     if (!text){
-      el.result.hidden = true;
+      el.panelWrap.hidden = true;
+      el.detail.hidden = true;
       el.empty.hidden = false;
       el.empty.textContent = "Waiting for text.";
       return;
@@ -376,7 +517,8 @@
       var lowerMark = lower ? lower.mark(SIZE) : null;
 
       el.empty.hidden = true;
-      el.result.hidden = false;
+      el.panelWrap.hidden = false;
+      el.detail.hidden = false;
 
       // ---- icon row + alphabet note ----
       var showBoth;
@@ -401,16 +543,20 @@
       wireTileButtons(document.getElementById("tileOriginal"), origMark.svg, "original");
       if (showBoth && lowerMark) wireTileButtons(document.getElementById("tileLower"), lowerMark.svg, "lowercase");
 
-      // ---- memo ----
-      el.memoText.innerHTML = nameMarkup(orig.letters);
+      // ---- name ----
+      el.nameText.innerHTML = nameMarkup(orig.letters);
 
       // ---- address ----
       el.addressText.textContent = text;
+
+      // ---- compact panel ----
+      renderPanel(origMark, lowerMark, showBoth, orig.letters, el.memo.value.trim(), text);
     }).catch(function(err){
       if (myRun !== run) return;
       el.empty.hidden = false;
       el.empty.textContent = "Couldn't compute a stealthicon for that text.";
-      el.result.hidden = true;
+      el.panelWrap.hidden = true;
+      el.detail.hidden = true;
       console.error(err);
     });
   }
@@ -422,6 +568,7 @@
   }
 
   el.src.addEventListener("input", scheduleRender);
+  el.memo.addEventListener("input", scheduleRender);
   el.lowerToggle.addEventListener("change", function(){ render(el.src.value); });
 
   el.example.addEventListener("click", function(){
@@ -430,10 +577,10 @@
     render(el.src.value);
   });
 
-  el.memoCopy.addEventListener("click", function(){ copyText(el.memoText.textContent, el.memoCopy); });
-  el.memoSave.addEventListener("click", function(){
-    download(new Blob([el.memoText.textContent], { type: "text/plain;charset=utf-8" }), "stealthicon-name.txt");
-    flash(el.memoSave, "Saved");
+  el.nameCopy.addEventListener("click", function(){ copyText(el.nameText.textContent, el.nameCopy); });
+  el.nameSave.addEventListener("click", function(){
+    download(new Blob([el.nameText.textContent], { type: "text/plain;charset=utf-8" }), "stealthicon-name.txt");
+    flash(el.nameSave, "Saved");
   });
   el.addrCopy.addEventListener("click", function(){ copyText(el.addressText.textContent, el.addrCopy); });
   el.addrSave.addEventListener("click", function(){
