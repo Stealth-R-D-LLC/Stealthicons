@@ -20,7 +20,9 @@ to be checked. Cheap to verify once; punishing to grind.
 ## Try it
 
 - **[`site/index.html`](site/index.html)** — the consumer page: paste an address, get a name and a
-  mark, copy or save any of it. Opens directly in a browser, no server needed.
+  mark, plus a compact shareable card combining both with the address (and an optional free-text
+  memo) into one image, copyable or saveable in a click. Opens directly in a browser, no server
+  needed.
 - **[`demo/stealthicons.html`](demo/stealthicons.html)** — the parameter workbench. Every dial in
   the generator is exposed here so you can see what it does and settle on a look. **The defaults
   it opens with are the official parameters** — leave them alone and the output matches every
