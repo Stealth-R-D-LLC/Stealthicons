@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stealthicons — a name and a mark for your address</title>
+<style>
+  :root{
+    --paper:#E7EBF0;
+    --panel:#F5F7FA;
+    --ink:#101E2A;
+    --muted:#5E7180;
+    --rule:#C3CDD6;
+    --rule-soft:#D9E0E7;
+    --vowel:#A85D06;
+    --cons:#0C6068;
+    --vowel-wash:#F0E2CE;
+    --cons-wash:#D6E6E6;
+    --sans:Helvetica,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;
+    --display:Helvetica,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;
+    --mono:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  }
+  .shell{max-width:640px;margin:0 auto;padding:48px 24px 72px}
+
+  /* ---- masthead ---- */
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 10px;
+  }
+  h1{
+    font-family:var(--display);font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1;
+    letter-spacing:.01em;margin:0 0 10px;
+  }
+  .tagline{
+    font-family:var(--display);font-size:clamp(16px,2.2vw,19px);line-height:1.35;
+    color:var(--muted);margin:0 0 26px;max-width:52ch;
+  }
+
+  /* ---- input ---- */
+  .field{margin-bottom:10px}
+  .label{
+    display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:8px;
+  }
+  .input{
+    width:100%;min-height:78px;resize:vertical;background:var(--panel);color:var(--ink);
+    border:1px solid var(--rule);border-radius:2px;padding:13px 15px;
+    font-family:var(--mono);font-size:15px;line-height:1.5;
+  }
+  .input:focus{outline:2px solid var(--cons);outline-offset:2px;border-color:var(--cons)}
+  .field-actions{display:flex;justify-content:flex-end;margin:8px 0 36px}
+  .btn{
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    background:none;border:1px solid var(--rule);border-radius:2px;color:var(--muted);
+    padding:6px 12px;cursor:pointer;
+  }
+  .btn:hover{border-color:var(--cons);color:var(--cons)}
+  .btn:focus-visible{outline:2px solid var(--cons);outline-offset:2px}
+  .mini-btn{
+    font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+    background:none;border:1px solid var(--rule-soft);border-radius:2px;color:var(--muted);
+    padding:4px 9px;cursor:pointer;flex:1 1 0;
+  }
+  .mini-btn:hover{border-color:var(--cons);color:var(--cons)}
+  .mini-btn:focus-visible{outline:2px solid var(--cons);outline-offset:2px}
+
+  /* ---- empty state ---- */
+  .empty{
+    border-top:1px solid var(--rule);padding-top:26px;color:var(--muted);
+    font-family:var(--mono);font-size:13px;
+  }
+
+  /* ---- result ---- */
+  .result{border-top:1px solid var(--rule);padding-top:30px}
+  .stage{width:min(380px,100%)}
+
+  .icon-row{display:flex;gap:16px;margin-bottom:10px}
+  .tile{flex:1 1 0;min-width:0}
+  .tile.solo{flex:1 1 auto}
+  .tile .frame{width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden}
+  .tile .frame svg{display:block;width:100%;height:100%}
+  .tile-cap{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);margin-top:8px;padding-top:6px;border-top:1px solid var(--rule-soft);
+  }
+  .tile-actions{display:flex;gap:6px;margin-top:6px}
+
+  .alphabet-note{
+    font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;
+    margin:14px 0 0;
+  }
+  .lower-toggle{
+    display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+    color:var(--muted);cursor:pointer;margin-top:8px;
+  }
+  .lower-toggle[hidden]{display:none}
+  .lower-toggle input{accent-color:var(--cons);width:14px;height:14px;cursor:pointer}
+
+  .memo-row{
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    margin-top:26px;
+  }
+  .memo{
+    font-family:var(--display);font-weight:700;letter-spacing:-.01em;
+    font-size:clamp(28px,7vw,42px);line-height:1;
+  }
+  .memo .v{color:var(--vowel)}
+  .memo .c{color:var(--cons)}
+  .row-actions{display:flex;gap:6px;flex:0 0 auto}
+
+  .address-row{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+    margin-top:10px;padding-top:12px;border-top:1px solid var(--rule-soft);
+  }
+  .address{
+    font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.6;
+    word-break:break-all;min-width:0;
+  }
+
+  .legend{
+    margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);
+    font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.9;
+  }
+  .legend dt{color:var(--ink);display:inline;font-weight:600}
+  .legend dt::after{content:" — "}
+  .legend dd{display:inline;margin:0}
+  .legend .item{margin-bottom:2px}
+  .swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+  .swatch.v{background:var(--vowel)}
+  .swatch.c{background:var(--cons)}
+
+  .flash{color:var(--cons) !important;border-color:var(--cons) !important}
+
+  footer{
+    margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);
+    font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.9;
+  }
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--cons)}
+
+  @media (max-width:480px){
+    .shell{padding:32px 16px 56px}
+    .memo-row,.address-row{flex-direction:column;align-items:flex-start}
+    .row-actions{flex-direction:row}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <p class="eyebrow">Stealthicons</p>
+  <h1>A name and a mark for your address</h1>
+  <p class="tagline">Paste an address (or any text) and get back a five-letter name you can say
+    aloud and an identicon you can recognise at a glance — both computed only from what you typed,
+    nothing stored, nothing sent anywhere.</p>
+
+  <div class="field">
+    <label class="label" for="src">Address or text</label>
+    <textarea class="input" id="src" spellcheck="false" placeholder="paste an address, or type anything"></textarea>
+  </div>
+  <div class="field-actions">
+    <button class="btn" id="example" type="button">Try an example</button>
+  </div>
+
+  <p class="empty" id="empty">Waiting for text.</p>
+
+  <div class="result" id="result" hidden>
+    <div class="stage">
+      <div class="icon-row" id="iconRow"></div>
+      <p class="alphabet-note" id="alphabetNote"></p>
+      <label class="lower-toggle" id="lowerToggleWrap" hidden>
+        <input type="checkbox" id="lowerToggle"> Show the lowercase-enforced mark too
+      </label>
+
+      <div class="memo-row">
+        <span class="memo" id="memoText"></span>
+        <div class="row-actions">
+          <button class="btn" id="memoCopy" type="button">Copy</button>
+          <button class="btn" id="memoSave" type="button">Save</button>
+        </div>
+      </div>
+
+      <div class="address-row">
+        <div class="address" id="addressText"></div>
+        <div class="row-actions">
+          <button class="btn" id="addrCopy" type="button">Copy</button>
+          <button class="btn" id="addrSave" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <dl class="legend">
+      <div class="item"><dt>Name</dt><dd>five letters, alternating <span class="swatch v"></span>vowel
+        and <span class="swatch c"></span>consonant, derived from the same hash as the mark — say it
+        aloud to compare two addresses without reading either one in full.</dd></div>
+      <div class="item"><dt>Mark</dt><dd>a symmetric identicon, also derived from the hash — the
+        official size is 8×8.</dd></div>
+      <div class="item"><dt>Original</dt><dd>the mark for your text exactly as typed.</dd></div>
+      <div class="item"><dt>Lowercase-enforced</dt><dd>the mark for your text with every letter
+        forced to lowercase first — shown alongside the original when the address format doesn't
+        clearly make case meaningful, as a hedge against a transcription that changed case.</dd></div>
+    </dl>
+  </div>
+
+  <footer>
+    <div>Every value here is a pure function of the text above — the same input always produces the
+      same name and mark, and nothing you type leaves this page.</div>
+    <div style="margin-top:8px">
+      <a href="demo/stealthicons.html">Full parameter workbench →</a>
+    </div>
+  </footer>
+
+</div>
+
+<script src="lib/stealthicons.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var el = {
+    src: document.getElementById("src"),
+    example: document.getElementById("example"),
+    empty: document.getElementById("empty"),
+    result: document.getElementById("result"),
+    iconRow: document.getElementById("iconRow"),
+    alphabetNote: document.getElementById("alphabetNote"),
+    lowerToggleWrap: document.getElementById("lowerToggleWrap"),
+    lowerToggle: document.getElementById("lowerToggle"),
+    memoText: document.getElementById("memoText"),
+    memoCopy: document.getElementById("memoCopy"),
+    memoSave: document.getElementById("memoSave"),
+    addressText: document.getElementById("addressText"),
+    addrCopy: document.getElementById("addrCopy"),
+    addrSave: document.getElementById("addrSave")
+  };
+
+  var SIZE = 8; // the official comparison size — this page isn't a workbench
+
+  var EXAMPLES = [
+    "3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5",
+    "0x9fA3C1eB2d5F4a7C8e1B6d3F0a9C2e5B8d1F4a70",
+    "a plain phrase like a diary entry",
+    "SOME-LEGACY-REFERENCE-CODE-1187"
+  ];
+  var exampleIdx = 0;
+
+  // ---- alphabet detection ----
+  // If the text looks like Base58, or already spans upper+lower+digit, case is
+  // doing real work in this format — a lowercase-folded reading isn't a
+  // plausible alternate transcription, so it's not worth showing by default.
+  function detectAlphabet(text){
+    var hasLower = /[a-z]/.test(text);
+    var hasUpper = /[A-Z]/.test(text);
+    var hasDigit = /[0-9]/.test(text);
+    var looksBase58 = /^[1-9A-HJ-NP-Za-km-z]+$/.test(text) && hasLower && hasUpper;
+    var fullAlnum = hasLower && hasUpper && hasDigit;
+    if (!hasUpper){
+      return { label: "no uppercase letters", caseSignificant: null };
+    }
+    if (looksBase58){
+      return { label: "Base58", caseSignificant: true };
+    }
+    if (fullAlnum){
+      return { label: "mixed-case alphanumeric", caseSignificant: true };
+    }
+    return { label: "mixed case, not clearly load-bearing", caseSignificant: false };
+  }
+
+  // ---- name markup (vowel/consonant coloured, matches the workbench) ----
+  function nameMarkup(letters){
+    return letters.map(function(L){
+      return '<span class="' + (L.vowel ? "v" : "c") + '">' + L.ch + "</span>";
+    }).join("");
+  }
+
+  function tileMarkup(id, label, svg){
+    return '<figure class="tile" id="' + id + '">' +
+      '<div class="frame">' + svg + "</div>" +
+      '<div class="tile-cap">' + label + "</div>" +
+      '<div class="tile-actions">' +
+        '<button class="mini-btn" data-act="svg">SVG</button>' +
+        '<button class="mini-btn" data-act="png">Copy</button>' +
+      "</div>" +
+    "</figure>";
+  }
+
+  function flash(btn, word){
+    var was = btn.textContent;
+    btn.textContent = word;
+    btn.classList.add("flash");
+    setTimeout(function(){ btn.textContent = was; btn.classList.remove("flash"); }, 1400);
+  }
+
+  function download(blob, name){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  }
+
+  function copyText(text, btn){
+    navigator.clipboard.writeText(text).then(
+      function(){ flash(btn, "Copied"); },
+      function(){ flash(btn, "Failed"); }
+    );
+  }
+
+  function svgToPngBlob(svg, px){
+    return new Promise(function(resolve, reject){
+      var img = new Image();
+      img.onload = function(){
+        var canvas = document.createElement("canvas");
+        canvas.width = canvas.height = px;
+        canvas.getContext("2d").drawImage(img, 0, 0, px, px);
+        canvas.toBlob(function(blob){ blob ? resolve(blob) : reject(new Error("toBlob failed")); }, "image/png");
+      };
+      img.onerror = function(){ reject(new Error("image load failed")); };
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    });
+  }
+
+  function wireTileButtons(root, svg, label){
+    root.addEventListener("click", function(ev){
+      var btn = ev.target.closest ? ev.target.closest(".mini-btn") : null;
+      if (!btn) return;
+      var sized = Stealthicons.svgAtSize(svg, 512);
+      if (btn.getAttribute("data-act") === "svg"){
+        download(new Blob([sized], { type: "image/svg+xml;charset=utf-8" }), "stealthicon-" + label + ".svg");
+        flash(btn, "Saved");
+        return;
+      }
+      svgToPngBlob(sized, 512).then(function(blob){
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+          return navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })])
+            .then(function(){ flash(btn, "Copied"); },
+                  function(){ download(blob, "stealthicon-" + label + ".png"); flash(btn, "Saved"); });
+        }
+        download(blob, "stealthicon-" + label + ".png");
+        flash(btn, "Saved");
+      }).catch(function(){ flash(btn, "Failed"); });
+    });
+  }
+
+  // ---- main render ----
+  var run = 0;
+
+  function render(text){
+    var myRun = ++run;
+    if (!text){
+      el.result.hidden = true;
+      el.empty.hidden = false;
+      el.empty.textContent = "Waiting for text.";
+      return;
+    }
+    el.empty.hidden = false;
+    el.empty.textContent = "Computing…";
+
+    var lowerText = text.toLowerCase();
+    var alphabet = detectAlphabet(text);
+    var needsLower = lowerText !== text;
+
+    Promise.all([
+      Stealthicons.stealthicon(text),
+      needsLower ? Stealthicons.stealthicon(lowerText) : null
+    ]).then(function(results){
+      if (myRun !== run) return; // a newer keystroke has already superseded this
+      var orig = results[0], lower = results[1];
+      var origMark = orig.mark(SIZE);
+      var lowerMark = lower ? lower.mark(SIZE) : null;
+
+      el.empty.hidden = true;
+      el.result.hidden = false;
+
+      // ---- icon row + alphabet note ----
+      var showBoth;
+      if (!needsLower){
+        showBoth = false;
+        el.alphabetNote.textContent = "No case in this text, so the original and the lowercase-enforced mark would be identical — only one is shown.";
+        el.lowerToggleWrap.hidden = true;
+      } else if (alphabet.caseSignificant){
+        showBoth = el.lowerToggle.checked;
+        el.alphabetNote.textContent = "Detected " + alphabet.label + " — case carries meaning here, so only the exact mark is shown by default.";
+        el.lowerToggleWrap.hidden = false;
+      } else {
+        showBoth = true;
+        el.alphabetNote.textContent = "Detected " + alphabet.label + " — showing both marks, since a case slip is a plausible transcription error here.";
+        el.lowerToggleWrap.hidden = true;
+      }
+
+      el.iconRow.innerHTML =
+        tileMarkup("tileOriginal", "Original", origMark.svg) +
+        (showBoth && lowerMark ? tileMarkup("tileLower", "Lowercase", lowerMark.svg) : "");
+      if (!showBoth || !lowerMark) el.iconRow.querySelector(".tile").classList.add("solo");
+      wireTileButtons(document.getElementById("tileOriginal"), origMark.svg, "original");
+      if (showBoth && lowerMark) wireTileButtons(document.getElementById("tileLower"), lowerMark.svg, "lowercase");
+
+      // ---- memo ----
+      el.memoText.innerHTML = nameMarkup(orig.letters);
+
+      // ---- address ----
+      el.addressText.textContent = text;
+    }).catch(function(err){
+      if (myRun !== run) return;
+      el.empty.hidden = false;
+      el.empty.textContent = "Couldn't compute a stealthicon for that text.";
+      el.result.hidden = true;
+      console.error(err);
+    });
+  }
+
+  var typing = null;
+  function scheduleRender(){
+    clearTimeout(typing);
+    typing = setTimeout(function(){ render(el.src.value); }, 250);
+  }
+
+  el.src.addEventListener("input", scheduleRender);
+  el.lowerToggle.addEventListener("change", function(){ render(el.src.value); });
+
+  el.example.addEventListener("click", function(){
+    el.src.value = EXAMPLES[exampleIdx % EXAMPLES.length];
+    exampleIdx++;
+    render(el.src.value);
+  });
+
+  el.memoCopy.addEventListener("click", function(){ copyText(el.memoText.textContent, el.memoCopy); });
+  el.memoSave.addEventListener("click", function(){
+    download(new Blob([el.memoText.textContent], { type: "text/plain;charset=utf-8" }), "stealthicon-name.txt");
+    flash(el.memoSave, "Saved");
+  });
+  el.addrCopy.addEventListener("click", function(){ copyText(el.addressText.textContent, el.addrCopy); });
+  el.addrSave.addEventListener("click", function(){
+    download(new Blob([el.addressText.textContent], { type: "text/plain;charset=utf-8" }), "address.txt");
+    flash(el.addrSave, "Saved");
+  });
+
+  render("");
+})();
+</script>
+</body>
+</html>

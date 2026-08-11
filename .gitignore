@@ -1,7 +1,6 @@
 # superseded prototype, kept locally for reference only (see HANDOFF.md)
-pseudoword.html
-pseudoword-config.json
-faces-pseudoword-config.json
+_legacy
+_bak
 
 # OS / editor
 .DS_Store
@@ -9,3 +8,9 @@ faces-pseudoword-config.json
 
 # node (library has no runtime deps, but tooling may add a node_modules locally)
 node_modules/
+
+# bu
+_buignor
+
+# vim backup
+*~
