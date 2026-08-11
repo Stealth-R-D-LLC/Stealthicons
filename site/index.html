@@ -14,8 +14,7 @@
     --rule-soft:#D9E0E7;
     --vowel:#A85D06;
     --cons:#0C6068;
-    --vowel-wash:#F0E2CE;
-    --cons-wash:#D6E6E6;
+    --address:#2D00B3;
     --sans:Helvetica,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;
     --display:Helvetica,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;
     --mono:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;
@@ -31,8 +30,10 @@
   /* ---- minimal header ---- */
   .brand{
     font-family:var(--mono);font-weight:600;font-size:15px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--ink);margin:0 0 22px;
+    text-transform:uppercase;color:var(--ink);margin:0 0 22px;text-decoration:none;
+    display:inline-block;
   }
+  .brand:hover{color:var(--cons)}
 
   /* ---- inputs ---- */
   .field{margin-bottom:12px}
@@ -47,7 +48,6 @@
   }
   textarea.input{min-height:66px;resize:vertical}
   .input:focus{outline:2px solid var(--cons);outline-offset:2px;border-color:var(--cons)}
-  .field-actions{display:flex;justify-content:flex-end;margin:8px 0 28px}
   .btn{
     font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
     background:none;border:1px solid var(--rule);border-radius:2px;color:var(--muted);
@@ -64,17 +64,22 @@
   .mini-btn:hover{border-color:var(--cons);color:var(--cons)}
   .mini-btn:focus-visible{outline:2px solid var(--cons);outline-offset:2px}
 
-  /* ---- empty state ---- */
-  .empty{
-    border:1px dashed var(--rule);border-radius:18px;padding:40px 20px;
-    color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;
+  .lower-toggle{
+    display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+    color:var(--muted);cursor:pointer;margin:10px 0 28px;
+  }
+  .lower-toggle input{accent-color:var(--cons);width:14px;height:14px;cursor:pointer}
+  .lower-toggle.disabled{opacity:.4;cursor:default}
+
+  .status{
+    font-family:var(--mono);font-size:11px;color:var(--muted);margin:0 0 10px;height:14px;
   }
 
   /* ---- the compact panel ---- */
   .panel-wrap{margin-bottom:14px}
   .panel-card{
     border-radius:18px;overflow:hidden;box-shadow:0 1px 3px rgba(16,30,42,.08);
-    max-width:420px;margin:0 auto;
+    max-width:340px;margin:0 auto;
   }
   .panel-card svg{display:block;width:100%;height:auto}
   .panel-actions{display:flex;justify-content:center;gap:8px;margin-top:12px}
@@ -98,17 +103,6 @@
   }
   .tile-actions{display:flex;gap:6px;margin-top:6px}
 
-  .alphabet-note{
-    font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6;
-    margin:14px 0 0;
-  }
-  .lower-toggle{
-    display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
-    color:var(--muted);cursor:pointer;margin-top:8px;
-  }
-  .lower-toggle[hidden]{display:none}
-  .lower-toggle input{accent-color:var(--cons);width:14px;height:14px;cursor:pointer}
-
   .name-row{
     display:flex;align-items:baseline;justify-content:space-between;gap:14px;
     margin-top:26px;
@@ -126,8 +120,22 @@
     margin-top:10px;padding-top:12px;border-top:1px solid var(--rule-soft);
   }
   .address{
-    font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.6;
+    font-family:var(--mono);font-size:13px;color:var(--address);line-height:1.6;
     word-break:break-all;min-width:0;
+  }
+
+  /* ---- size previews (mirrors the workbench's "At size" boxes) ---- */
+  .preview-group{margin-top:28px;padding-top:16px;border-top:1px solid var(--rule-soft)}
+  .preview-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:16px}
+  .preview-row:last-child{margin-bottom:0}
+  .preview-box{overflow:hidden;flex:0 0 auto;border-radius:4px}
+  .preview-box svg{display:block;width:100%;height:100%}
+  .p64{width:64px;height:64px}
+  .p32{width:32px;height:32px}
+  .p16{width:16px;height:16px}
+  .preview-tag{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);padding-bottom:2px;
   }
 
   .flash{color:var(--cons) !important;border-color:var(--cons) !important}
@@ -149,7 +157,7 @@
 <body>
 <div class="shell">
 
-  <p class="brand">Stealthicons</p>
+  <a class="brand" href="https://github.com/Stealth-R-D-LLC/stealthicons">Stealthicons</a>
 
   <div class="field">
     <label class="label" for="memo">Memo <span style="text-transform:none">(optional note — not part of the hash)</span></label>
@@ -159,13 +167,13 @@
     <label class="label" for="src">Address or text</label>
     <textarea class="input" id="src" spellcheck="false" placeholder="paste an address, or type anything"></textarea>
   </div>
-  <div class="field-actions">
-    <button class="btn" id="example" type="button">Try an example</button>
-  </div>
+  <label class="lower-toggle" id="lowerToggleWrap">
+    <input type="checkbox" id="lowerToggle"> Show the lowercase-enforced mark too
+  </label>
 
-  <p class="empty" id="empty">Waiting for text.</p>
+  <p class="status" id="status"></p>
 
-  <div class="panel-wrap" id="panelWrap" hidden>
+  <div class="panel-wrap" id="panelWrap">
     <div class="panel-card" id="panelCard"></div>
     <div class="panel-actions">
       <button class="btn primary" id="panelCopy" type="button">Copy image</button>
@@ -173,14 +181,10 @@
     </div>
   </div>
 
-  <div class="detail" id="detail" hidden>
+  <div class="detail" id="detail">
     <p class="detail-head">Individual pieces</p>
     <div class="stage">
       <div class="icon-row" id="iconRow"></div>
-      <p class="alphabet-note" id="alphabetNote"></p>
-      <label class="lower-toggle" id="lowerToggleWrap" hidden>
-        <input type="checkbox" id="lowerToggle"> Show the lowercase-enforced mark too
-      </label>
 
       <div class="name-row">
         <span class="name-value" id="nameText"></span>
@@ -197,6 +201,8 @@
           <button class="btn" id="addrSave" type="button">Save</button>
         </div>
       </div>
+
+      <div class="preview-group" id="previewGroup"></div>
     </div>
   </div>
 
@@ -218,56 +224,25 @@
   var el = {
     memo: document.getElementById("memo"),
     src: document.getElementById("src"),
-    example: document.getElementById("example"),
-    empty: document.getElementById("empty"),
+    lowerToggleWrap: document.getElementById("lowerToggleWrap"),
+    lowerToggle: document.getElementById("lowerToggle"),
+    status: document.getElementById("status"),
     panelWrap: document.getElementById("panelWrap"),
     panelCard: document.getElementById("panelCard"),
     panelCopy: document.getElementById("panelCopy"),
     panelSave: document.getElementById("panelSave"),
     detail: document.getElementById("detail"),
     iconRow: document.getElementById("iconRow"),
-    alphabetNote: document.getElementById("alphabetNote"),
-    lowerToggleWrap: document.getElementById("lowerToggleWrap"),
-    lowerToggle: document.getElementById("lowerToggle"),
     nameText: document.getElementById("nameText"),
     nameCopy: document.getElementById("nameCopy"),
     nameSave: document.getElementById("nameSave"),
     addressText: document.getElementById("addressText"),
     addrCopy: document.getElementById("addrCopy"),
-    addrSave: document.getElementById("addrSave")
+    addrSave: document.getElementById("addrSave"),
+    previewGroup: document.getElementById("previewGroup")
   };
 
   var SIZE = 8; // the official comparison size — this page isn't a workbench
-
-  var EXAMPLES = [
-    "3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5",
-    "0x9fA3C1eB2d5F4a7C8e1B6d3F0a9C2e5B8d1F4a70",
-    "a plain phrase like a diary entry",
-    "SOME-LEGACY-REFERENCE-CODE-1187"
-  ];
-  var exampleIdx = 0;
-
-  // ---- alphabet detection ----
-  // If the text looks like Base58, or already spans upper+lower+digit, case is
-  // doing real work in this format — a lowercase-folded reading isn't a
-  // plausible alternate transcription, so it's not worth showing by default.
-  function detectAlphabet(text){
-    var hasLower = /[a-z]/.test(text);
-    var hasUpper = /[A-Z]/.test(text);
-    var hasDigit = /[0-9]/.test(text);
-    var looksBase58 = /^[1-9A-HJ-NP-Za-km-z]+$/.test(text) && hasLower && hasUpper;
-    var fullAlnum = hasLower && hasUpper && hasDigit;
-    if (!hasUpper){
-      return { label: "no uppercase letters", caseSignificant: null };
-    }
-    if (looksBase58){
-      return { label: "Base58", caseSignificant: true };
-    }
-    if (fullAlnum){
-      return { label: "mixed-case alphanumeric", caseSignificant: true };
-    }
-    return { label: "mixed case, not clearly load-bearing", caseSignificant: false };
-  }
 
   // ---- name markup (vowel/consonant coloured, matches the workbench) ----
   function nameMarkup(letters){
@@ -285,6 +260,17 @@
         '<button class="mini-btn" data-act="png">Copy</button>' +
       "</div>" +
     "</figure>";
+  }
+
+  // ---- size previews, same idea as the workbench's "At size" row: the same
+  // mark, repeated into differently-sized boxes so CSS does the scaling ----
+  function previewRowMarkup(svg, label){
+    return '<div class="preview-row">' +
+      '<div class="preview-box p64">' + svg + "</div>" +
+      '<div class="preview-box p32">' + svg + "</div>" +
+      '<div class="preview-box p16">' + svg + "</div>" +
+      '<span class="preview-tag">' + label + "</span>" +
+    "</div>";
   }
 
   function flash(btn, word){
@@ -347,10 +333,12 @@
 
   // ---- compact panel: a single flattened SVG combining memo, mark(s), name
   // and address, so it can be copied/saved as one image (replacing a manual
-  // screen capture). What's on screen is exactly what gets exported.
+  // screen capture). What's on screen is exactly what gets exported. Kept at
+  // 512px logical width, rasterized 1:1, so the exported PNG lands close to
+  // a 512px maximum dimension rather than blowing past it.
   var PCOLOR = {
     panelBg: "#F5F7FA", ink: "#101E2A", muted: "#5E7180",
-    rule: "#C3CDD6", vowel: "#A85D06", cons: "#0C6068"
+    rule: "#C3CDD6", address: "#2D00B3"
   };
   var PMONO = "ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace";
   var PDISPLAY = "Helvetica,'Helvetica Neue',Arial,'Liberation Sans',sans-serif";
@@ -365,14 +353,22 @@
       'font-family="' + (opts.family || PMONO) + '" font-size="' + (opts.size || 13) + '" ' +
       'font-weight="' + (opts.weight || 400) + '" fill="' + (opts.color || PCOLOR.ink) + '"';
     if (opts.spacing) attrs += ' letter-spacing="' + opts.spacing + '"';
+    if (opts.id) attrs += ' id="' + opts.id + '"';
     return "<text " + attrs + ">" + escapeXml(str) + "</text>";
   }
 
-  function svgNameText(x, y, letters, size){
-    var spans = letters.map(function(L){
-      return '<tspan fill="' + (L.vowel ? PCOLOR.vowel : PCOLOR.cons) + '">' + escapeXml(L.ch) + "</tspan>";
+  // The name's colours match the mark it belongs with (its palette's primary
+  // and secondary dot colours) rather than the fixed vowel/consonant colours
+  // used elsewhere on the page, so the two read as one artifact.
+  // dominant-baseline="hanging" anchors the text by its top edge rather than
+  // its (font-metric-dependent) baseline, so the caller can place it exactly
+  // `gap` pixels below whatever came before with no ascent guesswork.
+  function svgNameText(x, yTop, letters, size, palette, id){
+    var primary = palette[1], secondary = palette[2];
+    var spans = letters.map(function(L, i){
+      return '<tspan fill="' + (i % 2 === 0 ? primary : secondary) + '">' + escapeXml(L.ch) + "</tspan>";
     }).join("");
-    return '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-family="' + PDISPLAY + '" ' +
+    return '<text id="' + id + '" x="' + x + '" y="' + yTop + '" text-anchor="middle" dominant-baseline="hanging" font-family="' + PDISPLAY + '" ' +
       'font-weight="700" font-size="' + size + '" letter-spacing="-1">' + spans + "</text>";
   }
 
@@ -396,78 +392,106 @@
     return lines.length ? lines : [""];
   }
 
+  var GAP_STD = 10, GAP_MEMO = 16;
+
   function buildPanelSvg(state){
-    var W = 512, PAD = 34, contentW = W - PAD * 2;
-    var y = 42;
+    var W = 512, PAD = 17, contentW = W - PAD * 2;
+    var y = PAD + 8;
     var parts = [];
 
-    parts.push(svgText(W / 2, y, "STEALTHICONS", { size: 14, color: PCOLOR.muted, weight: 600, spacing: 3 }));
-    y += 30;
-
     if (state.memo){
-      parts.push(svgText(W / 2, y, "MEMO", { size: 10, color: PCOLOR.muted, weight: 600, spacing: 1.5 }));
-      y += 20;
-      wrapMonospace(state.memo, contentW, 17, 2).forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: 17, color: PCOLOR.ink, family: PDISPLAY }));
-        y += 22;
+      wrapMonospace(state.memo, contentW, 16, 2).forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: 16, color: PCOLOR.ink, family: PDISPLAY }));
+        y += 20;
       });
-      y += 12;
+      y += GAP_MEMO;
     }
 
     if (state.showBoth && state.lowerSvg){
-      var iconSize = 188, gap = 22;
+      var iconSize = 94, gap = 12;
       var totalW = iconSize * 2 + gap;
       var xLeft = (W - totalW) / 2, xRight = xLeft + iconSize + gap;
       parts.push(embedIconSvg(state.origSvg, xLeft, y, iconSize));
       parts.push(embedIconSvg(state.lowerSvg, xRight, y, iconSize));
-      y += iconSize + 18;
-      parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 10, color: PCOLOR.muted, spacing: 1 }));
-      parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 10, color: PCOLOR.muted, spacing: 1 }));
-      y += 32;
+      y += iconSize + 14;
+      parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 8, color: PCOLOR.muted, spacing: 0.5 }));
+      parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 8, color: PCOLOR.muted, spacing: 0.5 }));
+      y += GAP_STD;
     } else {
-      var size = 292;
+      var size = 146;
       var x = (W - size) / 2;
       parts.push(embedIconSvg(state.origSvg, x, y, size));
-      y += size + 32;
+      y += size + GAP_STD;
     }
 
-    parts.push(svgText(W / 2, y, "NAME", { size: 10, color: PCOLOR.muted, weight: 600, spacing: 1.5 }));
-    y += 26;
-    parts.push(svgNameText(W / 2, y, state.letters, 40));
-    y += 38;
+    // dominant-baseline="hanging" means `y` here is the name's top edge, so
+    // the gap above is exactly GAP_STD with no ascent guesswork needed.
+    var NAME_SIZE = 34;
+    parts.push(svgNameText(W / 2, y, state.letters, NAME_SIZE, state.paletteList, "panelName"));
+    y += NAME_SIZE * 1.2 + GAP_STD;
 
-    wrapMonospace(state.address, contentW, 18, 4).forEach(function(line){
-      parts.push(svgText(W / 2, y, line, { size: 18, color: PCOLOR.ink }));
-      y += 24;
-    });
-    y += PAD - 10;
+    if (state.address){
+      wrapMonospace(state.address, contentW, 15, 4).forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: 15, color: PCOLOR.address, family: PMONO }));
+        y += 19;
+      });
+    }
+    y += 10;
+
+    parts.push(svgText(W / 2, y, "STEALTHICONS by StealthSend", { size: 9, color: PCOLOR.muted, weight: 600, spacing: 0.5 }));
+    y += PAD;
 
     var H = Math.round(y);
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + " " + H + '" role="img">' +
-      '<rect width="' + W + '" height="' + H + '" rx="18" fill="' + PCOLOR.panelBg + '"/>' +
-      '<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="' + (H - 1) + '" rx="17.5" fill="none" stroke="' + PCOLOR.rule + '"/>' +
-      parts.join("") + "</svg>";
+    return {
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + " " + H + '" role="img">' +
+        '<rect width="' + W + '" height="' + H + '" rx="18" fill="' + PCOLOR.panelBg + '"/>' +
+        '<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="' + (H - 1) + '" rx="17.5" fill="none" stroke="' + PCOLOR.rule + '"/>' +
+        parts.join("") + "</svg>"
+    };
   }
 
   var currentPanelSvg = null;
 
   function renderPanel(origMark, lowerMark, showBoth, letters, memo, address){
-    currentPanelSvg = buildPanelSvg({
+    var built = buildPanelSvg({
       origSvg: origMark.svg,
       lowerSvg: lowerMark ? lowerMark.svg : null,
       showBoth: showBoth,
       letters: letters,
+      paletteList: origMark.palette.list,
       memo: memo,
       address: address
     });
-    el.panelCard.innerHTML = currentPanelSvg;
+    el.panelCard.innerHTML = built.svg;
+
+    // Measure the actual rendered name text and drop a background swatch
+    // behind it, matching the mark's own background colour, sized to fit.
+    var nameEl = document.getElementById("panelName");
+    if (nameEl){
+      var bbox = nameEl.getBBox();
+      var padX = 12, padY = 7;
+      var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", bbox.x - padX);
+      rect.setAttribute("y", bbox.y - padY);
+      rect.setAttribute("width", bbox.width + padX * 2);
+      rect.setAttribute("height", bbox.height + padY * 2);
+      rect.setAttribute("rx", 8);
+      rect.setAttribute("fill", origMark.palette.list[0]);
+      nameEl.parentNode.insertBefore(rect, nameEl);
+    }
+
+    currentPanelSvg = el.panelCard.innerHTML;
+  }
+
+  function panelPngBlob(){
+    var m = currentPanelSvg.match(/viewBox="0 0 (\d+) (\d+)"/);
+    var w = +m[1], h = +m[2];
+    return svgToPngBlob(currentPanelSvg, w, h);
   }
 
   el.panelCopy.addEventListener("click", function(){
     if (!currentPanelSvg) return;
-    var m = currentPanelSvg.match(/viewBox="0 0 (\d+) (\d+)"/);
-    var w = +m[1], h = +m[2], scale = 2;
-    svgToPngBlob(currentPanelSvg, w * scale, h * scale).then(function(blob){
+    panelPngBlob().then(function(blob){
       if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
         return navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })])
           .then(function(){ flash(el.panelCopy, "Copied"); },
@@ -480,9 +504,7 @@
 
   el.panelSave.addEventListener("click", function(){
     if (!currentPanelSvg) return;
-    var m = currentPanelSvg.match(/viewBox="0 0 (\d+) (\d+)"/);
-    var w = +m[1], h = +m[2], scale = 2;
-    svgToPngBlob(currentPanelSvg, w * scale, h * scale).then(function(blob){
+    panelPngBlob().then(function(blob){
       download(blob, "stealthicons-card.png");
       flash(el.panelSave, "Saved");
     }).catch(function(){ flash(el.panelSave, "Failed"); });
@@ -493,49 +515,26 @@
 
   function render(text){
     var myRun = ++run;
-    if (!text){
-      el.panelWrap.hidden = true;
-      el.detail.hidden = true;
-      el.empty.hidden = false;
-      el.empty.textContent = "Waiting for text.";
-      return;
-    }
-    el.empty.hidden = false;
-    el.empty.textContent = "Computing…";
+    el.status.textContent = "Computing…";
 
     var lowerText = text.toLowerCase();
-    var alphabet = detectAlphabet(text);
     var needsLower = lowerText !== text;
+    var showBoth = needsLower && el.lowerToggle.checked;
 
     Promise.all([
       Stealthicons.stealthicon(text),
-      needsLower ? Stealthicons.stealthicon(lowerText) : null
+      showBoth ? Stealthicons.stealthicon(lowerText) : null
     ]).then(function(results){
       if (myRun !== run) return; // a newer keystroke has already superseded this
       var orig = results[0], lower = results[1];
       var origMark = orig.mark(SIZE);
       var lowerMark = lower ? lower.mark(SIZE) : null;
 
-      el.empty.hidden = true;
-      el.panelWrap.hidden = false;
-      el.detail.hidden = false;
+      el.status.textContent = "";
+      el.lowerToggle.disabled = !needsLower;
+      el.lowerToggleWrap.classList.toggle("disabled", !needsLower);
 
-      // ---- icon row + alphabet note ----
-      var showBoth;
-      if (!needsLower){
-        showBoth = false;
-        el.alphabetNote.textContent = "No case in this text, so the original and the lowercase-enforced mark would be identical — only one is shown.";
-        el.lowerToggleWrap.hidden = true;
-      } else if (alphabet.caseSignificant){
-        showBoth = el.lowerToggle.checked;
-        el.alphabetNote.textContent = "Detected " + alphabet.label + " — case carries meaning here, so only the exact mark is shown by default.";
-        el.lowerToggleWrap.hidden = false;
-      } else {
-        showBoth = true;
-        el.alphabetNote.textContent = "Detected " + alphabet.label + " — showing both marks, since a case slip is a plausible transcription error here.";
-        el.lowerToggleWrap.hidden = true;
-      }
-
+      // ---- icon row ----
       el.iconRow.innerHTML =
         tileMarkup("tileOriginal", "Original", origMark.svg) +
         (showBoth && lowerMark ? tileMarkup("tileLower", "Lowercase", lowerMark.svg) : "");
@@ -549,14 +548,16 @@
       // ---- address ----
       el.addressText.textContent = text;
 
+      // ---- size previews ----
+      el.previewGroup.innerHTML =
+        previewRowMarkup(origMark.svg, "Original") +
+        (showBoth && lowerMark ? previewRowMarkup(lowerMark.svg, "Lowercase") : "");
+
       // ---- compact panel ----
       renderPanel(origMark, lowerMark, showBoth, orig.letters, el.memo.value.trim(), text);
     }).catch(function(err){
       if (myRun !== run) return;
-      el.empty.hidden = false;
-      el.empty.textContent = "Couldn't compute a stealthicon for that text.";
-      el.panelWrap.hidden = true;
-      el.detail.hidden = true;
+      el.status.textContent = "Couldn't compute a stealthicon for that text.";
       console.error(err);
     });
   }
@@ -567,15 +568,14 @@
     typing = setTimeout(function(){ render(el.src.value); }, 250);
   }
 
-  el.src.addEventListener("input", scheduleRender);
+  el.src.addEventListener("input", function(){
+    // typing new text resets the toggle to the sensible default; an explicit
+    // click on the toggle itself (below) is what overrides it from there
+    el.lowerToggle.checked = /[A-Z]/.test(el.src.value);
+    scheduleRender();
+  });
   el.memo.addEventListener("input", scheduleRender);
   el.lowerToggle.addEventListener("change", function(){ render(el.src.value); });
-
-  el.example.addEventListener("click", function(){
-    el.src.value = EXAMPLES[exampleIdx % EXAMPLES.length];
-    exampleIdx++;
-    render(el.src.value);
-  });
 
   el.nameCopy.addEventListener("click", function(){ copyText(el.nameText.textContent, el.nameCopy); });
   el.nameSave.addEventListener("click", function(){
@@ -588,7 +588,9 @@
     flash(el.addrSave, "Saved");
   });
 
-  render("");
+  // Compute immediately, even for the empty string — it's still valid input
+  // (matches identicon.stealth.org, which never shows a "waiting" state).
+  render(el.src.value);
 })();
 </script>
 </body>
