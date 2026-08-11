@@ -1,0 +1,11 @@
+# superseded prototype, kept locally for reference only (see HANDOFF.md)
+pseudoword.html
+pseudoword-config.json
+faces-pseudoword-config.json
+
+# OS / editor
+.DS_Store
+*.swp
+
+# node (library has no runtime deps, but tooling may add a node_modules locally)
+node_modules/
