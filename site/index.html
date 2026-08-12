@@ -304,11 +304,25 @@
     "</div>";
   }
 
+  // Clicking again before the revert fires used to capture "Copied" itself
+  // as the text to revert to (each call just read the button's *current*
+  // label), so the stale second timeout could leave it stuck reading
+  // "Copied" forever. Cancelling any pending timer and only ever capturing
+  // the true original label once (on the first call, not the second) fixes
+  // that regardless of how many times the button is clicked in a row.
   function flash(btn, word){
-    var was = btn.textContent;
+    if (btn._flashTimer){
+      clearTimeout(btn._flashTimer);
+    } else {
+      btn._flashOriginal = btn.textContent;
+    }
     btn.textContent = word;
     btn.classList.add("flash");
-    setTimeout(function(){ btn.textContent = was; btn.classList.remove("flash"); }, 1400);
+    btn._flashTimer = setTimeout(function(){
+      btn.textContent = btn._flashOriginal;
+      btn.classList.remove("flash");
+      btn._flashTimer = null;
+    }, 1400);
   }
 
   function download(blob, name){
