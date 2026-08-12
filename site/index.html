@@ -411,9 +411,12 @@
       if (!btn) return;
       var act = btn.getAttribute("data-act");
       if (act === "copy-set" || act === "save-set"){
+        // 1:1 with the SVG's own declared width/height -- the whole point of
+        // labeling the boxes 64/32/16 is that those are honest pixel counts
+        // in the exported file, matching the card export and the custom-size
+        // export (verified against the raw PNG header) elsewhere on this page.
         var built = buildPreviewSetSvg(svg, label);
-        var scale = 2;
-        svgToPngBlob(built.svg, built.width * scale, built.height * scale).then(function(blob){
+        svgToPngBlob(built.svg, built.width, built.height).then(function(blob){
           var filename = "stealthicon-" + label + "-set.png";
           if (act === "copy-set" && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
             return navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })])
