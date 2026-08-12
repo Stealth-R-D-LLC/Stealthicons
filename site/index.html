@@ -465,16 +465,17 @@
   var GAP_STD = 8, GAP_MEMO = 3.2, GAP_LABEL = 6, GAP_NAME_ADDR = 16;
   var PAD_V = 18, PAD_TOP = 18 * 1.15; // memo gets ~15% more room above it than the bottom gets
   var MEMO_SIZE = 18.375, ADDR_SIZE = 14.625; // (14 x1.25 x1.05) and (13 x1.25 x0.9)
-  var CARD_MAX_W = 335;
+  var CARD_MAX_W = 285;
+  var ADDR_MAX_W = 225;
 
   // Real glyph measurement (canvas), not a character-count guess -- used to
   // decide how wide the card should get and to confirm the memo actually
   // fits on one line at that width, so the two never disagree.
   var measureCanvas = null;
-  function measureTextWidth(text, fontSize, fontFamily){
+  function measureTextWidth(text, fontSize, fontFamily, weight){
     if (!measureCanvas) measureCanvas = document.createElement("canvas");
     var ctx = measureCanvas.getContext("2d");
-    ctx.font = fontSize + "px " + fontFamily;
+    ctx.font = (weight || 400) + " " + fontSize + "px " + fontFamily;
     return ctx.measureText(text).width;
   }
 
@@ -483,23 +484,23 @@
   // (monospace, so already close to this) address text does, rather than
   // wrapping early the way a character-count guess would. No line cap --
   // a long memo just wraps to as many lines as it needs, growing the card.
-  function wrapByMeasure(text, maxWidth, fontSize, fontFamily){
+  function wrapByMeasure(text, maxWidth, fontSize, fontFamily, weight){
     var words = text.split(/\s+/).filter(Boolean);
     if (!words.length) return [""];
     var lines = [];
     var current = words[0];
     for (var i = 1; i < words.length; i++){
       var candidate = current + " " + words[i];
-      if (measureTextWidth(candidate, fontSize, fontFamily) <= maxWidth){
+      if (measureTextWidth(candidate, fontSize, fontFamily, weight) <= maxWidth){
         current = candidate;
         continue;
       }
       lines.push(current);
       current = words[i];
       // a single word wider than the line: hard-break it by characters
-      while (measureTextWidth(current, fontSize, fontFamily) > maxWidth && current.length > 1){
+      while (measureTextWidth(current, fontSize, fontFamily, weight) > maxWidth && current.length > 1){
         var fit = current;
-        while (fit.length > 1 && measureTextWidth(fit, fontSize, fontFamily) > maxWidth) fit = fit.slice(0, -1);
+        while (fit.length > 1 && measureTextWidth(fit, fontSize, fontFamily, weight) > maxWidth) fit = fit.slice(0, -1);
         if (fit.length === current.length) break;
         lines.push(fit);
         current = current.slice(fit.length);
@@ -524,7 +525,7 @@
     // one line" check below and wrap text that visibly had room to spare.
     var contentW = iconRowW;
     if (state.memo){
-      var memoW = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY);
+      var memoW = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY, 700);
       contentW = Math.max(contentW, Math.min(memoW, CARD_MAX_W - PAD * 2));
     }
     var W = Math.min(CARD_MAX_W, Math.ceil(contentW + PAD * 2));
@@ -537,11 +538,11 @@
     var parts = [];
 
     if (state.memo){
-      var memoLines = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY) <= contentW + 0.5
+      var memoLines = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY, 700) <= contentW + 0.5
         ? [state.memo]
-        : wrapByMeasure(state.memo, contentW, MEMO_SIZE, PDISPLAY);
+        : wrapByMeasure(state.memo, contentW, MEMO_SIZE, PDISPLAY, 700);
       memoLines.forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: MEMO_SIZE, color: PCOLOR.ink, family: PDISPLAY, hanging: true }));
+        parts.push(svgText(W / 2, y, line, { size: MEMO_SIZE, color: PCOLOR.ink, family: PDISPLAY, weight: 700, hanging: true }));
         y += 22;
       });
       y += GAP_MEMO;
@@ -565,7 +566,7 @@
     y += NAME_SIZE * 1.2 + GAP_NAME_ADDR;
 
     if (state.address){
-      wrapMonospace(state.address, contentW, ADDR_SIZE, 6).forEach(function(line){
+      wrapMonospace(state.address, Math.min(contentW, ADDR_MAX_W), ADDR_SIZE, 6).forEach(function(line){
         parts.push(svgText(W / 2, y, line, { size: ADDR_SIZE, color: PCOLOR.address, family: PMONO }));
         y += 19;
       });
