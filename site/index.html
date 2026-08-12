@@ -462,8 +462,9 @@
     return lines.length ? lines : [""];
   }
 
-  var GAP_STD = 8, GAP_MEMO = 3.2, GAP_LABEL = 6, GAP_NAME_ADDR = 16, PAD_V = 18;
-  var MEMO_SIZE = 17.5, ADDR_SIZE = 16.25; // 14 and 13, x1.25
+  var GAP_STD = 8, GAP_MEMO = 3.2, GAP_LABEL = 6, GAP_NAME_ADDR = 16;
+  var PAD_V = 18, PAD_TOP = 18 * 1.15; // memo gets ~15% more room above it than the bottom gets
+  var MEMO_SIZE = 18.375, ADDR_SIZE = 14.625; // (14 x1.25 x1.05) and (13 x1.25 x0.9)
   var CARD_MAX_W = 335;
 
   // Real glyph measurement (canvas), not a character-count guess -- used to
@@ -475,6 +476,37 @@
     var ctx = measureCanvas.getContext("2d");
     ctx.font = fontSize + "px " + fontFamily;
     return ctx.measureText(text).width;
+  }
+
+  // Word-wrap driven by the same real measurement used to size the card, so
+  // a wrapped memo actually fills each line's available width the way the
+  // (monospace, so already close to this) address text does, rather than
+  // wrapping early the way a character-count guess would. No line cap --
+  // a long memo just wraps to as many lines as it needs, growing the card.
+  function wrapByMeasure(text, maxWidth, fontSize, fontFamily){
+    var words = text.split(/\s+/).filter(Boolean);
+    if (!words.length) return [""];
+    var lines = [];
+    var current = words[0];
+    for (var i = 1; i < words.length; i++){
+      var candidate = current + " " + words[i];
+      if (measureTextWidth(candidate, fontSize, fontFamily) <= maxWidth){
+        current = candidate;
+        continue;
+      }
+      lines.push(current);
+      current = words[i];
+      // a single word wider than the line: hard-break it by characters
+      while (measureTextWidth(current, fontSize, fontFamily) > maxWidth && current.length > 1){
+        var fit = current;
+        while (fit.length > 1 && measureTextWidth(fit, fontSize, fontFamily) > maxWidth) fit = fit.slice(0, -1);
+        if (fit.length === current.length) break;
+        lines.push(fit);
+        current = current.slice(fit.length);
+      }
+    }
+    lines.push(current);
+    return lines;
   }
 
   function buildPanelSvg(state){
@@ -499,19 +531,18 @@
     contentW = W - PAD * 2;
     var iconsX = (W - iconRowW) / 2;
 
-    // top and bottom padding are equal (PAD_V), and both memo and the
-    // footer are top-anchored (dominant-baseline="hanging") so that gap is
-    // exact instead of guessed from font-metric ascent.
-    var y = PAD_V;
+    // both memo and the footer are top-anchored (dominant-baseline="hanging")
+    // so their padding is exact instead of guessed from font-metric ascent.
+    var y = PAD_TOP;
     var parts = [];
 
     if (state.memo){
       var memoLines = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY) <= contentW + 0.5
         ? [state.memo]
-        : wrapMonospace(state.memo, contentW, MEMO_SIZE, 2);
+        : wrapByMeasure(state.memo, contentW, MEMO_SIZE, PDISPLAY);
       memoLines.forEach(function(line){
         parts.push(svgText(W / 2, y, line, { size: MEMO_SIZE, color: PCOLOR.ink, family: PDISPLAY, hanging: true }));
-        y += 21;
+        y += 22;
       });
       y += GAP_MEMO;
     }
@@ -536,7 +567,7 @@
     if (state.address){
       wrapMonospace(state.address, contentW, ADDR_SIZE, 6).forEach(function(line){
         parts.push(svgText(W / 2, y, line, { size: ADDR_SIZE, color: PCOLOR.address, family: PMONO }));
-        y += 21;
+        y += 19;
       });
     }
     y += GAP_STD;
