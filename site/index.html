@@ -14,7 +14,7 @@
     --rule-soft:#D9E0E7;
     --vowel:#A85D06;
     --cons:#0C6068;
-    --address:#2D00B3;
+    --address:#6600CC;
     --sans:Helvetica,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;
     --display:Helvetica,"Helvetica Neue",Arial,"Liberation Sans",sans-serif;
     --mono:ui-monospace,Menlo,Consolas,"DejaVu Sans Mono",monospace;
@@ -339,7 +339,7 @@
   // rasterized 1:1, so the exported PNG's pixel size matches what's drawn.
   var PCOLOR = {
     panelBg: "#F5F7FA", ink: "#101E2A", muted: "#5E7180",
-    rule: "#C3CDD6", address: "#2D00B3"
+    rule: "#C3CDD6", address: "#6600CC"
   };
   var PMONO = "ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace";
   var PDISPLAY = "Helvetica,'Helvetica Neue',Arial,'Liberation Sans',sans-serif";
@@ -354,6 +354,7 @@
       'font-family="' + (opts.family || PMONO) + '" font-size="' + (opts.size || 13) + '" ' +
       'font-weight="' + (opts.weight || 400) + '" fill="' + (opts.color || PCOLOR.ink) + '"';
     if (opts.spacing) attrs += ' letter-spacing="' + opts.spacing + '"';
+    if (opts.hanging) attrs += ' dominant-baseline="hanging"';
     return "<text " + attrs + ">" + escapeXml(str) + "</text>";
   }
 
@@ -401,33 +402,36 @@
     return lines.length ? lines : [""];
   }
 
-  var GAP_STD = 8, GAP_MEMO = 5;
+  var GAP_STD = 8, GAP_MEMO = 2, GAP_LABEL = 6, PAD_V = 18;
 
   function buildPanelSvg(state){
     var PAD = 16;
     var twoUp = state.showBoth && state.lowerSvg;
-    var iconSize = twoUp ? 65 : 176;
+    var iconSize = twoUp ? 104 : 176;
     var iconGap = 10;
     var iconRowW = twoUp ? (iconSize * 2 + iconGap) : iconSize;
 
     var W = Math.round(iconRowW + PAD * 2);
     var contentW = W - PAD * 2;
-    var y = PAD;
+    // top and bottom padding are equal (PAD_V), and both memo and the
+    // footer are top-anchored (dominant-baseline="hanging") so that gap is
+    // exact instead of guessed from font-metric ascent.
+    var y = PAD_V;
     var parts = [];
 
     if (state.memo){
       wrapMonospace(state.memo, contentW, 14, 2).forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: 14, color: PCOLOR.ink, family: PDISPLAY }));
-        y += 18;
+        parts.push(svgText(W / 2, y, line, { size: 14, color: PCOLOR.ink, family: PDISPLAY, hanging: true }));
+        y += 17;
       });
       y += GAP_MEMO;
     }
 
     if (twoUp){
       var xLeft = PAD, xRight = PAD + iconSize + iconGap;
-      parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 8, color: PCOLOR.muted, spacing: 0.5 }));
-      parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 8, color: PCOLOR.muted, spacing: 0.5 }));
-      y += 12;
+      parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 8, color: PCOLOR.muted, spacing: 0.5, hanging: true }));
+      parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 8, color: PCOLOR.muted, spacing: 0.5, hanging: true }));
+      y += 8 + GAP_LABEL;
       parts.push(embedIconSvg(state.origSvg, xLeft, y, iconSize));
       parts.push(embedIconSvg(state.lowerSvg, xRight, y, iconSize));
       y += iconSize + GAP_STD;
@@ -448,8 +452,8 @@
     }
     y += GAP_STD;
 
-    parts.push(svgText(W / 2, y, "STEALTHICONS by StealthSend", { size: 8, color: PCOLOR.muted, weight: 600, spacing: 0.5 }));
-    y += PAD - 2;
+    parts.push(svgText(W / 2, y, "STEALTHICONS by StealthSend", { size: 8, color: PCOLOR.muted, weight: 600, spacing: 0.5, hanging: true }));
+    y += 10 + PAD_V;
 
     var H = Math.round(y);
     return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '" role="img">' +
