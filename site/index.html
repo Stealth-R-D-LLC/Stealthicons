@@ -370,6 +370,12 @@
       var l = Stealthicons.luminance(c);
       if (l < bestLum){ bestLum = l; best = c; }
     });
+    // Even the darkest dot colour is sometimes still too light against the
+    // card's own background to read well. When that happens, fall back to
+    // the mark's background colour instead -- since the palette keeps
+    // background-vs-dots contrast up, a mark with light dots reliably has a
+    // dark background to begin with.
+    if (Stealthicons.contrast(best, PCOLOR.panelBg) < 4.5) best = paletteList[0];
     return best;
   }
 
@@ -402,7 +408,7 @@
     return lines.length ? lines : [""];
   }
 
-  var GAP_STD = 8, GAP_MEMO = 2, GAP_LABEL = 6, PAD_V = 18;
+  var GAP_STD = 8, GAP_MEMO = 3.2, GAP_LABEL = 6, GAP_NAME_ADDR = 16, PAD_V = 18;
 
   function buildPanelSvg(state){
     var PAD = 16;
@@ -442,7 +448,7 @@
 
     var NAME_SIZE = 30;
     parts.push(svgNameText(W / 2, y, state.letters, NAME_SIZE, darkestColor(state.paletteList)));
-    y += NAME_SIZE * 1.2 + GAP_STD;
+    y += NAME_SIZE * 1.2 + GAP_NAME_ADDR;
 
     if (state.address){
       wrapMonospace(state.address, contentW, 13, 6).forEach(function(line){
