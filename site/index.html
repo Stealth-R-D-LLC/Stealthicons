@@ -66,13 +66,13 @@
 
   .lower-toggle{
     display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
-    color:var(--muted);cursor:pointer;margin:10px 0 28px;
+    color:var(--muted);cursor:pointer;margin:10px 0 14px;
   }
   .lower-toggle input{accent-color:var(--cons);width:14px;height:14px;cursor:pointer}
   .lower-toggle.disabled{opacity:.4;cursor:default}
 
   .status{
-    font-family:var(--mono);font-size:11px;color:var(--muted);margin:0 0 10px;height:14px;
+    font-family:var(--mono);font-size:11px;color:var(--muted);margin:0 0 4px;height:14px;
   }
 
   /* ---- the compact panel ---- */
@@ -126,17 +126,28 @@
 
   /* ---- size previews (mirrors the workbench's "At size" boxes) ---- */
   .preview-group{margin-top:28px;padding-top:16px;border-top:1px solid var(--rule-soft)}
-  .preview-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:16px}
-  .preview-row:last-child{margin-bottom:0}
+  .preview-block{margin-bottom:22px}
+  .preview-block:last-child{margin-bottom:0}
+  .preview-row{display:flex;align-items:flex-end;gap:10px}
+  .preview-item{display:flex;flex-direction:column;align-items:center;gap:5px}
   .preview-box{overflow:hidden;flex:0 0 auto;border-radius:4px}
   .preview-box svg{display:block;width:100%;height:100%}
   .p64{width:64px;height:64px}
   .p32{width:32px;height:32px}
   .p16{width:16px;height:16px}
+  .preview-size{font-family:var(--mono);font-size:9px;color:var(--muted)}
   .preview-tag{
     font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--muted);padding-bottom:2px;
+    color:var(--muted);padding-bottom:7px;
   }
+  .preview-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px}
+  .preview-input{
+    width:66px;background:var(--panel);color:var(--ink);
+    border:1px solid var(--rule-soft);border-radius:2px;padding:4px 7px;
+    font-family:var(--mono);font-size:11px;
+  }
+  .preview-input:focus{outline:2px solid var(--cons);outline-offset:1px;border-color:var(--cons)}
+  .preview-actions .mini-btn{flex:0 0 auto}
 
   .flash{color:var(--cons) !important;border-color:var(--cons) !important}
 
@@ -264,12 +275,20 @@
 
   // ---- size previews, same idea as the workbench's "At size" row: the same
   // mark, repeated into differently-sized boxes so CSS does the scaling ----
-  function previewRowMarkup(svg, label){
-    return '<div class="preview-row">' +
-      '<div class="preview-box p64">' + svg + "</div>" +
-      '<div class="preview-box p32">' + svg + "</div>" +
-      '<div class="preview-box p16">' + svg + "</div>" +
-      '<span class="preview-tag">' + label + "</span>" +
+  function previewBlockMarkup(svg, label, id){
+    return '<div class="preview-block" id="' + id + '">' +
+      '<div class="preview-row">' +
+        '<div class="preview-item"><div class="preview-box p64">' + svg + '</div><span class="preview-size">64</span></div>' +
+        '<div class="preview-item"><div class="preview-box p32">' + svg + '</div><span class="preview-size">32</span></div>' +
+        '<div class="preview-item"><div class="preview-box p16">' + svg + '</div><span class="preview-size">16</span></div>' +
+        '<span class="preview-tag">' + label + "</span>" +
+      "</div>" +
+      '<div class="preview-actions">' +
+        '<button class="mini-btn" data-act="copy">Copy</button>' +
+        '<button class="mini-btn" data-act="save">Save</button>' +
+        '<input class="preview-input" type="number" min="1" max="4096" placeholder="256">' +
+        '<button class="mini-btn" data-act="save-custom">Save size</button>' +
+      "</div>" +
     "</div>";
   }
 
@@ -328,6 +347,41 @@
         download(blob, "stealthicon-" + label + ".png");
         flash(btn, "Saved");
       }).catch(function(){ flash(btn, "Failed"); });
+    });
+  }
+
+  function pngCopyOrSave(svg, size, filename, btn, forceSave){
+    var sized = Stealthicons.svgAtSize(svg, size);
+    svgToPngBlob(sized, size, size).then(function(blob){
+      if (!forceSave && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+        return navigator.clipboard.write([new window.ClipboardItem({ "image/png": blob })])
+          .then(function(){ flash(btn, "Copied"); },
+                function(){ download(blob, filename); flash(btn, "Saved"); });
+      }
+      download(blob, filename);
+      flash(btn, "Saved");
+    }).catch(function(){ flash(btn, "Failed"); });
+  }
+
+  // Preset Copy/Save use the preview's own native size (64px, the largest
+  // box shown); "Save size" lets the user render at any pixel size they type.
+  function wirePreviewBlock(root, svg, label){
+    var input = root.querySelector(".preview-input");
+    root.addEventListener("click", function(ev){
+      var btn = ev.target.closest ? ev.target.closest(".mini-btn") : null;
+      if (!btn) return;
+      var act = btn.getAttribute("data-act");
+      if (act === "copy"){
+        pngCopyOrSave(svg, 64, "stealthicon-" + label + "-64.png", btn, false);
+      } else if (act === "save"){
+        pngCopyOrSave(svg, 64, "stealthicon-" + label + "-64.png", btn, true);
+      } else if (act === "save-custom"){
+        var size = Math.round(parseFloat(input.value));
+        if (!isFinite(size) || size < 1) size = 256;
+        size = Math.min(4096, Math.max(1, size));
+        input.value = size;
+        pngCopyOrSave(svg, size, "stealthicon-" + label + "-" + size + ".png", btn, true);
+      }
     });
   }
 
@@ -550,8 +604,10 @@
 
       // ---- size previews ----
       el.previewGroup.innerHTML =
-        previewRowMarkup(origMark.svg, "Original") +
-        (showBoth && lowerMark ? previewRowMarkup(lowerMark.svg, "Lowercase") : "");
+        previewBlockMarkup(origMark.svg, "Original", "previewOriginal") +
+        (showBoth && lowerMark ? previewBlockMarkup(lowerMark.svg, "Lowercase", "previewLower") : "");
+      wirePreviewBlock(document.getElementById("previewOriginal"), origMark.svg, "original");
+      if (showBoth && lowerMark) wirePreviewBlock(document.getElementById("previewLower"), lowerMark.svg, "lowercase");
 
       // ---- compact panel ----
       renderPanel(origMark, lowerMark, showBoth, orig.letters, el.memo.value.trim(), text);
