@@ -76,12 +76,12 @@
   }
 
   /* ---- the compact panel ---- */
-  .panel-wrap{margin-bottom:14px}
+  .panel-wrap{margin-bottom:14px;text-align:center}
   .panel-card{
-    border-radius:18px;overflow:hidden;box-shadow:0 1px 3px rgba(16,30,42,.08);
-    max-width:340px;margin:0 auto;
+    display:inline-block;border-radius:18px;overflow:hidden;
+    box-shadow:0 1px 3px rgba(16,30,42,.08);max-width:100%;
   }
-  .panel-card svg{display:block;width:100%;height:auto}
+  .panel-card svg{display:block;max-width:100%;height:auto}
   .panel-actions{display:flex;justify-content:center;gap:8px;margin-top:12px}
 
   /* ---- detail section ---- */
@@ -333,9 +333,10 @@
 
   // ---- compact panel: a single flattened SVG combining memo, mark(s), name
   // and address, so it can be copied/saved as one image (replacing a manual
-  // screen capture). What's on screen is exactly what gets exported. Kept at
-  // 512px logical width, rasterized 1:1, so the exported PNG lands close to
-  // a 512px maximum dimension rather than blowing past it.
+  // screen capture). What's on screen is exactly what gets exported. Both
+  // dimensions are sized to content (driven by the icon row's width) rather
+  // than a fixed canvas, so the card stays portrait and free of dead space;
+  // rasterized 1:1, so the exported PNG's pixel size matches what's drawn.
   var PCOLOR = {
     panelBg: "#F5F7FA", ink: "#101E2A", muted: "#5E7180",
     rule: "#C3CDD6", address: "#2D00B3"
@@ -353,23 +354,31 @@
       'font-family="' + (opts.family || PMONO) + '" font-size="' + (opts.size || 13) + '" ' +
       'font-weight="' + (opts.weight || 400) + '" fill="' + (opts.color || PCOLOR.ink) + '"';
     if (opts.spacing) attrs += ' letter-spacing="' + opts.spacing + '"';
-    if (opts.id) attrs += ' id="' + opts.id + '"';
     return "<text " + attrs + ">" + escapeXml(str) + "</text>";
   }
 
-  // The name's colours match the mark it belongs with (its palette's primary
-  // and secondary dot colours) rather than the fixed vowel/consonant colours
-  // used elsewhere on the page, so the two read as one artifact.
-  // dominant-baseline="hanging" anchors the text by its top edge rather than
-  // its (font-metric-dependent) baseline, so the caller can place it exactly
-  // `gap` pixels below whatever came before with no ascent guesswork.
-  function svgNameText(x, yTop, letters, size, palette, id){
-    var primary = palette[1], secondary = palette[2];
-    var spans = letters.map(function(L, i){
-      return '<tspan fill="' + (i % 2 === 0 ? primary : secondary) + '">' + escapeXml(L.ch) + "</tspan>";
-    }).join("");
-    return '<text id="' + id + '" x="' + x + '" y="' + yTop + '" text-anchor="middle" dominant-baseline="hanging" font-family="' + PDISPLAY + '" ' +
-      'font-weight="700" font-size="' + size + '" letter-spacing="-1">' + spans + "</text>";
+  // The name is coloured with the darkest of its own mark's dot colours (not
+  // the fixed vowel/consonant colours used elsewhere on the page), so it
+  // reads as belonging to that specific mark. No background swatch -- a
+  // solid colour on the card's own background is legible enough on its own
+  // and keeps the card from visually fusing the name into whatever's above it.
+  function darkestColor(paletteList){
+    var candidates = [paletteList[1], paletteList[2], paletteList[3]].filter(Boolean);
+    var best = candidates[0], bestLum = Stealthicons.luminance(best);
+    candidates.forEach(function(c){
+      var l = Stealthicons.luminance(c);
+      if (l < bestLum){ bestLum = l; best = c; }
+    });
+    return best;
+  }
+
+  // dominant-baseline="hanging" anchors text by its top edge rather than its
+  // (font-metric-dependent) baseline, so gaps can be set directly with no
+  // ascent guesswork.
+  function svgNameText(x, yTop, letters, size, color){
+    var text = letters.map(function(L){ return L.ch; }).join("");
+    return '<text x="' + x + '" y="' + yTop + '" text-anchor="middle" dominant-baseline="hanging" font-family="' + PDISPLAY + '" ' +
+      'font-weight="700" font-size="' + size + '" letter-spacing="-1" fill="' + color + '">' + escapeXml(text) + "</text>";
   }
 
   function embedIconSvg(svg, x, y, size){
@@ -392,68 +401,67 @@
     return lines.length ? lines : [""];
   }
 
-  var GAP_STD = 10, GAP_MEMO = 16;
+  var GAP_STD = 8, GAP_MEMO = 5;
 
   function buildPanelSvg(state){
-    var W = 512, PAD = 17, contentW = W - PAD * 2;
-    var y = PAD + 8;
+    var PAD = 16;
+    var twoUp = state.showBoth && state.lowerSvg;
+    var iconSize = twoUp ? 65 : 176;
+    var iconGap = 10;
+    var iconRowW = twoUp ? (iconSize * 2 + iconGap) : iconSize;
+
+    var W = Math.round(iconRowW + PAD * 2);
+    var contentW = W - PAD * 2;
+    var y = PAD;
     var parts = [];
 
     if (state.memo){
-      wrapMonospace(state.memo, contentW, 16, 2).forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: 16, color: PCOLOR.ink, family: PDISPLAY }));
-        y += 20;
+      wrapMonospace(state.memo, contentW, 14, 2).forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: 14, color: PCOLOR.ink, family: PDISPLAY }));
+        y += 18;
       });
       y += GAP_MEMO;
     }
 
-    if (state.showBoth && state.lowerSvg){
-      var iconSize = 94, gap = 12;
-      var totalW = iconSize * 2 + gap;
-      var xLeft = (W - totalW) / 2, xRight = xLeft + iconSize + gap;
-      parts.push(embedIconSvg(state.origSvg, xLeft, y, iconSize));
-      parts.push(embedIconSvg(state.lowerSvg, xRight, y, iconSize));
-      y += iconSize + 14;
+    if (twoUp){
+      var xLeft = PAD, xRight = PAD + iconSize + iconGap;
       parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 8, color: PCOLOR.muted, spacing: 0.5 }));
       parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 8, color: PCOLOR.muted, spacing: 0.5 }));
-      y += GAP_STD;
+      y += 12;
+      parts.push(embedIconSvg(state.origSvg, xLeft, y, iconSize));
+      parts.push(embedIconSvg(state.lowerSvg, xRight, y, iconSize));
+      y += iconSize + GAP_STD;
     } else {
-      var size = 146;
-      var x = (W - size) / 2;
-      parts.push(embedIconSvg(state.origSvg, x, y, size));
-      y += size + GAP_STD;
+      parts.push(embedIconSvg(state.origSvg, PAD, y, iconSize));
+      y += iconSize + GAP_STD;
     }
 
-    // dominant-baseline="hanging" means `y` here is the name's top edge, so
-    // the gap above is exactly GAP_STD with no ascent guesswork needed.
-    var NAME_SIZE = 34;
-    parts.push(svgNameText(W / 2, y, state.letters, NAME_SIZE, state.paletteList, "panelName"));
+    var NAME_SIZE = 30;
+    parts.push(svgNameText(W / 2, y, state.letters, NAME_SIZE, darkestColor(state.paletteList)));
     y += NAME_SIZE * 1.2 + GAP_STD;
 
     if (state.address){
-      wrapMonospace(state.address, contentW, 15, 4).forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: 15, color: PCOLOR.address, family: PMONO }));
-        y += 19;
+      wrapMonospace(state.address, contentW, 13, 6).forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: 13, color: PCOLOR.address, family: PMONO }));
+        y += 17;
       });
     }
-    y += 10;
+    y += GAP_STD;
 
-    parts.push(svgText(W / 2, y, "STEALTHICONS by StealthSend", { size: 9, color: PCOLOR.muted, weight: 600, spacing: 0.5 }));
-    y += PAD;
+    parts.push(svgText(W / 2, y, "STEALTHICONS by StealthSend", { size: 8, color: PCOLOR.muted, weight: 600, spacing: 0.5 }));
+    y += PAD - 2;
 
     var H = Math.round(y);
-    return {
-      svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + " " + H + '" role="img">' +
-        '<rect width="' + W + '" height="' + H + '" rx="18" fill="' + PCOLOR.panelBg + '"/>' +
-        '<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="' + (H - 1) + '" rx="17.5" fill="none" stroke="' + PCOLOR.rule + '"/>' +
-        parts.join("") + "</svg>"
-    };
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '" role="img">' +
+      '<rect width="' + W + '" height="' + H + '" rx="16" fill="' + PCOLOR.panelBg + '"/>' +
+      '<rect x="0.5" y="0.5" width="' + (W - 1) + '" height="' + (H - 1) + '" rx="15.5" fill="none" stroke="' + PCOLOR.rule + '"/>' +
+      parts.join("") + "</svg>";
   }
 
   var currentPanelSvg = null;
 
   function renderPanel(origMark, lowerMark, showBoth, letters, memo, address){
-    var built = buildPanelSvg({
+    currentPanelSvg = buildPanelSvg({
       origSvg: origMark.svg,
       lowerSvg: lowerMark ? lowerMark.svg : null,
       showBoth: showBoth,
@@ -462,25 +470,7 @@
       memo: memo,
       address: address
     });
-    el.panelCard.innerHTML = built.svg;
-
-    // Measure the actual rendered name text and drop a background swatch
-    // behind it, matching the mark's own background colour, sized to fit.
-    var nameEl = document.getElementById("panelName");
-    if (nameEl){
-      var bbox = nameEl.getBBox();
-      var padX = 12, padY = 7;
-      var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rect.setAttribute("x", bbox.x - padX);
-      rect.setAttribute("y", bbox.y - padY);
-      rect.setAttribute("width", bbox.width + padX * 2);
-      rect.setAttribute("height", bbox.height + padY * 2);
-      rect.setAttribute("rx", 8);
-      rect.setAttribute("fill", origMark.palette.list[0]);
-      nameEl.parentNode.insertBefore(rect, nameEl);
-    }
-
-    currentPanelSvg = el.panelCard.innerHTML;
+    el.panelCard.innerHTML = currentPanelSvg;
   }
 
   function panelPngBlob(){
