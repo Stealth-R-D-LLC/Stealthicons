@@ -463,6 +463,19 @@
   }
 
   var GAP_STD = 8, GAP_MEMO = 3.2, GAP_LABEL = 6, GAP_NAME_ADDR = 16, PAD_V = 18;
+  var MEMO_SIZE = 17.5, ADDR_SIZE = 16.25; // 14 and 13, x1.25
+  var CARD_MAX_W = 335;
+
+  // Real glyph measurement (canvas), not a character-count guess -- used to
+  // decide how wide the card should get and to confirm the memo actually
+  // fits on one line at that width, so the two never disagree.
+  var measureCanvas = null;
+  function measureTextWidth(text, fontSize, fontFamily){
+    if (!measureCanvas) measureCanvas = document.createElement("canvas");
+    var ctx = measureCanvas.getContext("2d");
+    ctx.font = fontSize + "px " + fontFamily;
+    return ctx.measureText(text).width;
+  }
 
   function buildPanelSvg(state){
     var PAD = 16;
@@ -471,8 +484,21 @@
     var iconGap = 10;
     var iconRowW = twoUp ? (iconSize * 2 + iconGap) : iconSize;
 
-    var W = Math.round(iconRowW + PAD * 2);
-    var contentW = W - PAD * 2;
+    // The card widens (up to CARD_MAX_W) to fit the memo on one line if it
+    // can; the icon row and address just inherit whatever width results.
+    // Rounds UP (not to nearest) so contentW is never a hair narrower than
+    // the real measured memo width -- rounding to nearest was occasionally
+    // shaving off a fraction of a pixel, just enough to fail the "fits on
+    // one line" check below and wrap text that visibly had room to spare.
+    var contentW = iconRowW;
+    if (state.memo){
+      var memoW = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY);
+      contentW = Math.max(contentW, Math.min(memoW, CARD_MAX_W - PAD * 2));
+    }
+    var W = Math.min(CARD_MAX_W, Math.ceil(contentW + PAD * 2));
+    contentW = W - PAD * 2;
+    var iconsX = (W - iconRowW) / 2;
+
     // top and bottom padding are equal (PAD_V), and both memo and the
     // footer are top-anchored (dominant-baseline="hanging") so that gap is
     // exact instead of guessed from font-metric ascent.
@@ -480,15 +506,18 @@
     var parts = [];
 
     if (state.memo){
-      wrapMonospace(state.memo, contentW, 14, 2).forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: 14, color: PCOLOR.ink, family: PDISPLAY, hanging: true }));
-        y += 17;
+      var memoLines = measureTextWidth(state.memo, MEMO_SIZE, PDISPLAY) <= contentW + 0.5
+        ? [state.memo]
+        : wrapMonospace(state.memo, contentW, MEMO_SIZE, 2);
+      memoLines.forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: MEMO_SIZE, color: PCOLOR.ink, family: PDISPLAY, hanging: true }));
+        y += 21;
       });
       y += GAP_MEMO;
     }
 
     if (twoUp){
-      var xLeft = PAD, xRight = PAD + iconSize + iconGap;
+      var xLeft = iconsX, xRight = iconsX + iconSize + iconGap;
       parts.push(svgText(xLeft + iconSize / 2, y, "ORIGINAL", { size: 8, color: PCOLOR.muted, spacing: 0.5, hanging: true }));
       parts.push(svgText(xRight + iconSize / 2, y, "LOWERCASE", { size: 8, color: PCOLOR.muted, spacing: 0.5, hanging: true }));
       y += 8 + GAP_LABEL;
@@ -496,7 +525,7 @@
       parts.push(embedIconSvg(state.lowerSvg, xRight, y, iconSize));
       y += iconSize + GAP_STD;
     } else {
-      parts.push(embedIconSvg(state.origSvg, PAD, y, iconSize));
+      parts.push(embedIconSvg(state.origSvg, iconsX, y, iconSize));
       y += iconSize + GAP_STD;
     }
 
@@ -505,9 +534,9 @@
     y += NAME_SIZE * 1.2 + GAP_NAME_ADDR;
 
     if (state.address){
-      wrapMonospace(state.address, contentW, 13, 6).forEach(function(line){
-        parts.push(svgText(W / 2, y, line, { size: 13, color: PCOLOR.address, family: PMONO }));
-        y += 17;
+      wrapMonospace(state.address, contentW, ADDR_SIZE, 6).forEach(function(line){
+        parts.push(svgText(W / 2, y, line, { size: ADDR_SIZE, color: PCOLOR.address, family: PMONO }));
+        y += 21;
       });
     }
     y += GAP_STD;
@@ -624,10 +653,15 @@
     typing = setTimeout(function(){ render(el.src.value); }, 250);
   }
 
+  // Auto-check only fires on the transition from no-uppercase to
+  // has-uppercase -- once the text already has uppercase, further edits
+  // (including a user unchecking the box) leave it alone, so turning it off
+  // sticks instead of being clobbered by the next keystroke.
+  var prevHasUpper = false;
   el.src.addEventListener("input", function(){
-    // typing new text resets the toggle to the sensible default; an explicit
-    // click on the toggle itself (below) is what overrides it from there
-    el.lowerToggle.checked = /[A-Z]/.test(el.src.value);
+    var hasUpper = /[A-Z]/.test(el.src.value);
+    if (hasUpper && !prevHasUpper) el.lowerToggle.checked = true;
+    prevHasUpper = hasUpper;
     scheduleRender();
   });
   el.memo.addEventListener("input", scheduleRender);
