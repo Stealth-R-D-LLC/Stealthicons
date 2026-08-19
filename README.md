@@ -20,8 +20,13 @@ to be checked. Each layer doesn't simply add to the difficulty — it multiplies
 
 ## Try it
 
-- **[`site/index.html`](site/index.html)** — the consumer page: paste an address, get a name and a mark, shareable via a card, which combines both with the address and an optional memo into one image, copyable or saveable with one click. This page opens directly in a browser, no server needed.
-- **[`demo/stealthicons.html`](demo/stealthicons.html)** — the parameter workbench. Every dial in the Stealthicon generator is exposed for users to see what it does and settle on a look. **Its defaults are the official parameters** — leave them alone and the output matches every other conforming implementation of Stealthicons.
+- **[stealthicons.stealth.org](https://stealthicons.stealth.org/)** — the consumer page, live: paste an address, get a name and a mark, shareable via a card, which combines both with the address and an optional memo into one image, copyable or saveable with one click.
+- **[stealthicons.stealth.org/demo/stealthicons.html](https://stealthicons.stealth.org/demo/stealthicons.html)** — the parameter workbench, live. Every dial in the Stealthicon generator is exposed for users to see what it does and settle on a look. **Its defaults are the official parameters** — leave them alone and the output matches every other conforming implementation of Stealthicons.
+
+Both are fully static — no server needed. Clone this repo and open `site/index.html` or
+`demo/stealthicons.html` directly in a browser and they work exactly the same way. (GitHub's file
+viewer shows these as source code, not a live page, if you click them from here — download or clone
+first.)
 
 ## Using the library
 
