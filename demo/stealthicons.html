@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Stealthicons — deterministic marks from a hash</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgOCA4IiByb2xlPSJpbWciPjxkZWZzPjxjbGlwUGF0aCBpZD0icHdjbGlwNTkiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHJ4PSIxLjQ1MDAiIHJ5PSIxLjQ1MDAiLz48L2NsaXBQYXRoPjwvZGVmcz48ZyBjbGlwLXBhdGg9InVybCgjcHdjbGlwNTkpIj48cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmJmY2ZlIi8+PGcgZmlsbD0iIzI0MjQ0MiI+PHBhdGggZD0iTTUuNTAwMCAxLjMxODlMNi41MDAwIDEuMzE4OUw2LjUwMDAgMC42MTg5TDUuNTAwMCAwLjYxODlaIi8+PHBhdGggZD0iTTIuNTAwMCAwLjYxODlMMS41MDAwIDAuNjE4OUwxLjUwMDAgMS4zMTg5TDIuNTAwMCAxLjMxODlaIi8+PHBhdGggZD0iTTUuMTk2OSAxLjE0MzlMNS42OTY5IDIuMDA5OUw2LjMwMzEgMS42NTk5TDUuODAzMSAwLjc5MzlaIi8+PHBhdGggZD0iTTIuMTk2OSAwLjc5MzlMMS42OTY5IDEuNjU5OUwyLjMwMzEgMi4wMDk5TDIuODAzMSAxLjE0MzlaIi8+PHBhdGggZD0iTTUuNjk2OSAyLjAwOTlMNi4xOTY5IDIuODc2MEw2LjgwMzEgMi41MjYwTDYuMzAzMSAxLjY1OTlaIi8+PHBhdGggZD0iTTEuNjk2OSAxLjY1OTlMMS4xOTY5IDIuNTI2MEwxLjgwMzEgMi44NzYwTDIuMzAzMSAyLjAwOTlaIi8+PHBhdGggZD0iTTcuMTk2OSA0LjI1ODBMNi42OTY5IDUuMTI0MEw3LjMwMzEgNS40NzQwTDcuODAzMSA0LjYwODBaIi8+PHBhdGggZD0iTTAuMTk2OSA0LjYwODBMMC42OTY5IDUuNDc0MEwxLjMwMzEgNS4xMjQwTDAuODAzMSA0LjI1ODBaIi8+PGNpcmNsZSBjeD0iNC4wMDAwIiBjeT0iMy41NjcwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI1LjUwMDAiIGN5PSIwLjk2ODkiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjIuNTAwMCIgY3k9IjAuOTY4OSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNi41MDAwIiBjeT0iMC45Njg5IiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIxLjUwMDAiIGN5PSIwLjk2ODkiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjYuMDAwMCIgY3k9IjEuODM0OSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMi4wMDAwIiBjeT0iMS44MzQ5IiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI2LjUwMDAiIGN5PSIyLjcwMTAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjEuNTAwMCIgY3k9IjIuNzAxMCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNy41MDAwIiBjeT0iNC40MzMwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIwLjUwMDAiIGN5PSI0LjQzMzAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjcuMDAwMCIgY3k9IjUuMjk5MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMS4wMDAwIiBjeT0iNS4yOTkwIiByPSIwLjM1MDAiLz48L2c+PGcgZmlsbD0iIzQ1NmUxYyI+PHBvbHlnb24gcG9pbnRzPSI0LjUwMDAsMC45Njg5IDMuNTAwMCwwLjk2ODkgNC4wMDAwLDEuODM0OSIvPjxwYXRoIGQ9Ik00LjgwMzEgNC42MDgwTDUuMzAzMSAzLjc0MjBMNC42OTY5IDMuMzkyMEw0LjE5NjkgNC4yNTgwWiIvPjxwYXRoIGQ9Ik0zLjgwMzEgNC4yNTgwTDMuMzAzMSAzLjM5MjBMMi42OTY5IDMuNzQyMEwzLjE5NjkgNC42MDgwWiIvPjxwYXRoIGQ9Ik01LjMwMzEgMy4zOTIwTDQuODAzMSAyLjUyNjBMNC4xOTY5IDIuODc2MEw0LjY5NjkgMy43NDIwWiIvPjxwYXRoIGQ9Ik0zLjMwMzEgMy43NDIwTDMuODAzMSAyLjg3NjBMMy4xOTY5IDIuNTI2MEwyLjY5NjkgMy4zOTIwWiIvPjxwYXRoIGQ9Ik00LjUwMDAgMy4wNTEwTDUuNTAwMCAzLjA1MTBMNS41MDAwIDIuMzUxMEw0LjUwMDAgMi4zNTEwWiIvPjxwYXRoIGQ9Ik0zLjUwMDAgMi4zNTEwTDIuNTAwMCAyLjM1MTBMMi41MDAwIDMuMDUxMEwzLjUwMDAgMy4wNTEwWiIvPjxwYXRoIGQ9Ik01LjAwMDAgMy45MTcwTDYuMDAwMCAzLjkxNzBMNi4wMDAwIDMuMjE3MEw1LjAwMDAgMy4yMTcwWiIvPjxwYXRoIGQ9Ik0zLjAwMDAgMy4yMTcwTDIuMDAwMCAzLjIxNzBMMi4wMDAwIDMuOTE3MEwzLjAwMDAgMy45MTcwWiIvPjxwYXRoIGQ9Ik01LjY5NjkgMy4zOTIwTDUuMTk2OSA0LjI1ODBMNS44MDMxIDQuNjA4MEw2LjMwMzEgMy43NDIwWiIvPjxwYXRoIGQ9Ik0xLjY5NjkgMy43NDIwTDIuMTk2OSA0LjYwODBMMi44MDMxIDQuMjU4MEwyLjMwMzEgMy4zOTIwWiIvPjxwYXRoIGQ9Ik00LjgwMzEgNi4zNDAxTDUuMzAzMSA1LjQ3NDBMNC42OTY5IDUuMTI0MEw0LjE5NjkgNS45OTAxWiIvPjxwYXRoIGQ9Ik0zLjgwMzEgNS45OTAxTDMuMzAzMSA1LjEyNDBMMi42OTY5IDUuNDc0MEwzLjE5NjkgNi4zNDAxWiIvPjxwYXRoIGQ9Ik01LjAwMDAgNS42NDkwTDYuMDAwMCA1LjY0OTBMNi4wMDAwIDQuOTQ5MEw1LjAwMDAgNC45NDkwWiIvPjxwYXRoIGQ9Ik0zLjAwMDAgNC45NDkwTDIuMDAwMCA0Ljk0OTBMMi4wMDAwIDUuNjQ5MEwzLjAwMDAgNS42NDkwWiIvPjxwYXRoIGQ9Ik00LjE5NjkgNi4zNDAxTDQuNjk2OSA3LjIwNjFMNS4zMDMxIDYuODU2MUw0LjgwMzEgNS45OTAxWiIvPjxwYXRoIGQ9Ik0zLjE5NjkgNS45OTAxTDIuNjk2OSA2Ljg1NjFMMy4zMDMxIDcuMjA2MUwzLjgwMzEgNi4zNDAxWiIvPjxwYXRoIGQ9Ik02LjMwMzEgNS40NzQwTDYuODAzMSA0LjYwODBMNi4xOTY5IDQuMjU4MEw1LjY5NjkgNS4xMjQwWiIvPjxwYXRoIGQ9Ik0yLjMwMzEgNS4xMjQwTDEuODAzMSA0LjI1ODBMMS4xOTY5IDQuNjA4MEwxLjY5NjkgNS40NzQwWiIvPjxwYXRoIGQ9Ik02LjgwMzEgNC42MDgwTDcuMzAzMSAzLjc0MjBMNi42OTY5IDMuMzkyMEw2LjE5NjkgNC4yNTgwWiIvPjxwYXRoIGQ9Ik0xLjgwMzEgNC4yNTgwTDEuMzAzMSAzLjM5MjBMMC42OTY5IDMuNzQyMEwxLjE5NjkgNC42MDgwWiIvPjxwYXRoIGQ9Ik00LjE5NjkgMC43OTM5TDMuNjk2OSAxLjY1OTlMNC4zMDMxIDIuMDA5OUw0LjgwMzEgMS4xNDM5WiIvPjxwYXRoIGQ9Ik0zLjE5NjkgMS4xNDM5TDMuNjk2OSAyLjAwOTlMNC4zMDMxIDEuNjU5OUwzLjgwMzEgMC43OTM5WiIvPjxwYXRoIGQ9Ik00LjUwMDAgNC4wODMwTDMuNTAwMCA0LjA4MzBMMy41MDAwIDQuNzgzMEw0LjUwMDAgNC43ODMwWiIvPjxwYXRoIGQ9Ik00LjUwMDAgMi4zNTEwTDMuNTAwMCAyLjM1MTBMMy41MDAwIDMuMDUxMEw0LjUwMDAgMy4wNTEwWiIvPjxwYXRoIGQ9Ik00LjUwMDAgNS44MTUxTDMuNTAwMCA1LjgxNTFMMy41MDAwIDYuNTE1MUw0LjUwMDAgNi41MTUxWiIvPjxwYXRoIGQ9Ik00LjUwMDAgMC42MTg5TDMuNTAwMCAwLjYxODlMMy41MDAwIDEuMzE4OUw0LjUwMDAgMS4zMTg5WiIvPjxwYXRoIGQ9Ik01LjgwMzEgMi41MjYwTDUuMzAzMSAxLjY1OTlMNC42OTY5IDIuMDA5OUw1LjE5NjkgMi44NzYwWiIvPjxwYXRoIGQ9Ik0yLjgwMzEgMi44NzYwTDMuMzAzMSAyLjAwOTlMMi42OTY5IDEuNjU5OUwyLjE5NjkgMi41MjYwWiIvPjxwYXRoIGQ9Ik01LjAwMDAgNi42ODExTDQuMDAwMCA2LjY4MTFMNC4wMDAwIDcuMzgxMUw1LjAwMDAgNy4zODExWiIvPjxwYXRoIGQ9Ik0zLjAwMDAgNy4zODExTDQuMDAwMCA3LjM4MTFMNC4wMDAwIDYuNjgxMUwzLjAwMDAgNi42ODExWiIvPjxjaXJjbGUgY3g9IjQuNTAwMCIgY3k9IjQuNDMzMCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMy41MDAwIiBjeT0iNC40MzMwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI1LjAwMDAiIGN5PSIzLjU2NzAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjMuMDAwMCIgY3k9IjMuNTY3MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNC41MDAwIiBjeT0iMi43MDEwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIzLjUwMDAiIGN5PSIyLjcwMTAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjUuNTAwMCIgY3k9IjIuNzAxMCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMi41MDAwIiBjeT0iMi43MDEwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI2LjAwMDAiIGN5PSIzLjU2NzAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjIuMDAwMCIgY3k9IjMuNTY3MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNS41MDAwIiBjeT0iNC40MzMwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIyLjUwMDAiIGN5PSI0LjQzMzAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjQuMDAwMCIgY3k9IjUuMjk5MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNC41MDAwIiBjeT0iNi4xNjUxIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIzLjUwMDAiIGN5PSI2LjE2NTEiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjUuMDAwMCIgY3k9IjUuMjk5MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMy4wMDAwIiBjeT0iNS4yOTkwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI2LjAwMDAiIGN5PSI1LjI5OTAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjIuMDAwMCIgY3k9IjUuMjk5MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNS4wMDAwIiBjeT0iNy4wMzExIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIzLjAwMDAiIGN5PSI3LjAzMTEiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjYuNTAwMCIgY3k9IjQuNDMzMCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMS41MDAwIiBjeT0iNC40MzMwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI3LjAwMDAiIGN5PSIzLjU2NzAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjEuMDAwMCIgY3k9IjMuNTY3MCIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNC4wMDAwIiBjeT0iNy4wMzExIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI0LjUwMDAiIGN5PSIwLjk2ODkiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjMuNTAwMCIgY3k9IjAuOTY4OSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNC4wMDAwIiBjeT0iMS44MzQ5IiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI1LjAwMDAiIGN5PSIxLjgzNDkiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjMuMDAwMCIgY3k9IjEuODM0OSIgcj0iMC4zNTAwIi8+PC9nPjxnIGZpbGw9IiM1MjE0MjQiPjxwYXRoIGQ9Ik01LjE5NjkgNi4zNDAxTDUuNjk2OSA3LjIwNjFMNi4zMDMxIDYuODU2MUw1LjgwMzEgNS45OTAxWiIvPjxwYXRoIGQ9Ik0yLjE5NjkgNS45OTAxTDEuNjk2OSA2Ljg1NjFMMi4zMDMxIDcuMjA2MUwyLjgwMzEgNi4zNDAxWiIvPjxwYXRoIGQ9Ik01LjUwMDAgNi41MTUxTDYuNTAwMCA2LjUxNTFMNi41MDAwIDUuODE1MUw1LjUwMDAgNS44MTUxWiIvPjxwYXRoIGQ9Ik0yLjUwMDAgNS44MTUxTDEuNTAwMCA1LjgxNTFMMS41MDAwIDYuNTE1MUwyLjUwMDAgNi41MTUxWiIvPjxwYXRoIGQ9Ik02LjUwMDAgNi41MTUxTDcuNTAwMCA2LjUxNTFMNy41MDAwIDUuODE1MUw2LjUwMDAgNS44MTUxWiIvPjxwYXRoIGQ9Ik0xLjUwMDAgNS44MTUxTDAuNTAwMCA1LjgxNTFMMC41MDAwIDYuNTE1MUwxLjUwMDAgNi41MTUxWiIvPjxwYXRoIGQ9Ik02LjAwMDAgNy4zODExTDcuMDAwMCA3LjM4MTFMNy4wMDAwIDYuNjgxMUw2LjAwMDAgNi42ODExWiIvPjxwYXRoIGQ9Ik0yLjAwMDAgNi42ODExTDEuMDAwMCA2LjY4MTFMMS4wMDAwIDcuMzgxMUwyLjAwMDAgNy4zODExWiIvPjxwYXRoIGQ9Ik03LjgwMzEgMi41MjYwTDcuMzAzMSAxLjY1OTlMNi42OTY5IDIuMDA5OUw3LjE5NjkgMi44NzYwWiIvPjxwYXRoIGQ9Ik0wLjgwMzEgMi44NzYwTDEuMzAzMSAyLjAwOTlMMC42OTY5IDEuNjU5OUwwLjE5NjkgMi41MjYwWiIvPjxwYXRoIGQ9Ik03LjE5NjkgNS45OTAxTDYuNjk2OSA2Ljg1NjFMNy4zMDMxIDcuMjA2MUw3LjgwMzEgNi4zNDAxWiIvPjxwYXRoIGQ9Ik0wLjE5NjkgNi4zNDAxTDAuNjk2OSA3LjIwNjFMMS4zMDMxIDYuODU2MUwwLjgwMzEgNS45OTAxWiIvPjxjaXJjbGUgY3g9IjUuNTAwMCIgY3k9IjYuMTY1MSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMi41MDAwIiBjeT0iNi4xNjUxIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI2LjAwMDAiIGN5PSI3LjAzMTEiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjIuMDAwMCIgY3k9IjcuMDMxMSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNi41MDAwIiBjeT0iNi4xNjUxIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIxLjUwMDAiIGN5PSI2LjE2NTEiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjcuNTAwMCIgY3k9IjYuMTY1MSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMC41MDAwIiBjeT0iNi4xNjUxIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSI3LjAwMDAiIGN5PSI3LjAzMTEiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjEuMDAwMCIgY3k9IjcuMDMxMSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iNy41MDAwIiBjeT0iMi43MDEwIiByPSIwLjM1MDAiLz48Y2lyY2xlIGN4PSIwLjUwMDAiIGN5PSIyLjcwMTAiIHI9IjAuMzUwMCIvPjxjaXJjbGUgY3g9IjcuMDAwMCIgY3k9IjEuODM0OSIgcj0iMC4zNTAwIi8+PGNpcmNsZSBjeD0iMS4wMDAwIiBjeT0iMS44MzQ5IiByPSIwLjM1MDAiLz48L2c+PC9nPjwvc3ZnPgo=">
+<meta name="description" content="Every dial in the Stealthicon generator, exposed. Change the parameters, watch what they do, and settle on a look — the defaults it opens with are the official ones.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Stealthicons — deterministic marks from a hash">
+<meta property="og:description" content="Every dial in the Stealthicon generator, exposed. Change the parameters, watch what they do, and settle on a look — the defaults it opens with are the official ones.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Stealthicons — deterministic marks from a hash">
+<meta name="twitter:description" content="Every dial in the Stealthicon generator, exposed. Change the parameters, watch what they do, and settle on a look — the defaults it opens with are the official ones.">
 <style>
   :root{
     --paper:#E7EBF0;
@@ -33,6 +41,15 @@
   .pw-shell{max-width:860px;margin:0 auto;padding:40px 24px 80px}
 
   /* ---- masthead ---- */
+  a{color:var(--muted);text-decoration:underline}
+  a:hover,a:focus-visible{color:var(--cons)}
+  .pw-hero{display:flex;gap:32px;align-items:flex-start}
+  .pw-hero-text{flex:1 1 auto;min-width:0}
+  .pw-hero-image{
+    flex:0 0 auto;width:180px;height:auto;border-radius:10px;
+    box-shadow:0 1px 3px rgba(16,30,42,.12);
+  }
+  .pw-outlink{font-family:var(--mono);font-size:12px;letter-spacing:.02em;margin:0}
   .pw-lede.pw-sub{font-size:14px;border-left:2px solid var(--rule);padding-left:14px}
   .st-rule{border:0;border-top:1px solid var(--ink);margin:34px 0 30px}
   .st-input{margin-bottom:0}
@@ -165,7 +182,7 @@
   .pw-bit.spare.on i{background:var(--rule)}
   .pw-bit.spare.off i{background:var(--rule-soft)}
 
-  .pw-segs{position:relative;height:30px;width:100%}
+  .pw-segs{position:relative;height:30px;width:100%;margin-bottom:6px}
   .pw-seg{
     position:absolute;top:0;height:30px;
     display:flex;align-items:center;justify-content:center;
@@ -304,6 +321,8 @@
     .pw-seg,.pw-segs{height:24px}
     .pw-seg{font-size:10px}
     .pw-copy{margin-left:0}
+    .pw-hero{flex-direction:column-reverse}
+    .pw-hero-image{width:120px}
   }
   @media (prefers-reduced-motion:no-preference){
     .pw-glyph{transition:color .18s ease}
@@ -313,11 +332,17 @@
 </head>
 <body>
 <main class="pw-shell">
-  <h1 class="pw-title">Stealthicons</h1>
-  <p class="pw-tagline">A name and a mark, from the address itself.</p>
-  <p class="pw-lede">An address is a wall of characters nobody reads. A stealthicon gives it two handles instead: a five-letter <b>name</b> you can say aloud, and a symmetric <b>mark</b> you can recognise at a glance — both derived from the address alone, so nothing needs storing and nothing can drift out of sync.</p>
-  <p class="pw-lede">The point is the cost of faking one. An attacker who wants an address that <i>looks</i> like yours has to match the name and the mark together, and every guess costs a full memory-hard hash. Four things compound: <b>Argon2d</b> makes each attempt expensive in time and memory, the <b>name</b> narrows the target, the <b>mark</b> narrows it further, and the <b>address</b> itself still has to be checked. Cheap to verify once; punishing to grind.</p>
-  <p class="pw-lede pw-sub">This page is a workbench: change the parameters, watch what they do, and settle on a look for your own project. The defaults it opens with are the official stealthicon parameters — leave them alone and what you see here is what everyone else's implementation will produce.</p>
+  <div class="pw-hero">
+    <div class="pw-hero-text">
+      <h1 class="pw-title">Stealthicons</h1>
+      <p class="pw-tagline">Secure Identicons</p>
+      <p class="pw-lede">Identicons are pictures of data, and have been adapted to cryptocurrency addresses to quickly help a sender identify the address, without examining the full address. The pictorial representation adds a level of security. However, as computing power has grown, and phishing has gotten more sophisticated, identicon security has not kept up.</p>
+      <p class="pw-lede">Enter Stealthicons. Stealthicons are a combination of a picture of the data and a five-letter pseudoword, both tied to a computationally expensive cryptographic hash of the data. The result is a quick way to verify an address that is practically impossible to spoof. A phisher would have to grind the picture, the pseudoword, and the address itself to fool a victim, at a cost far too great for even a targeted phishing attack.</p>
+      <p class="pw-lede pw-sub">This web page is a demo and workbench. Enter some data, play with the controls, and create Stealthicons derivatives that capture the personality of your project. Or use the Stealthicons library with the default settings for fully conformant identicons. Or, if you just want to create Stealthicons for your address book, head over to <a href="https://stealthicons.stealth.org/">stealthicons.stealth.org</a>, bookmark it, and enter your address to get started.</p>
+      <p class="pw-outlink"><a href="https://github.com/Stealth-R-D-LLC/stealthicons">Source on GitHub →</a></p>
+    </div>
+    <img class="pw-hero-image" src="../media/kotil.png" alt="A sample Stealthicons card for the text STEALTHICONS: the mark, and its name, kotil" width="235" height="337">
+  </div>
 
   <section class="pw-section">
     <div class="pw-head">
@@ -427,11 +452,11 @@
       <span>variants counted from the generator's own decisions</span>
     </div>
     <div class="pw-icons" id="icons"></div>
-    <p class="pw-note"><b>Hexagonal</b> puts dots on a triangular lattice addressed in HECS, long rows of <i>n</i> alternating with short rows of <i>n−1</i> set half a cell right, so all six neighbours are one unit away and every waist is identical. Odd grids run short-long-short and even grids drop the first and last dot of their top row, keeping every corner clear of the crop. Chains take root on the midline and walk outward, extending with probability <code>D / (1 + steps/W)</code> so they thin as they lengthen; each dot may bifurcate once; adjacent leaves of one colour then close with probability <i>Closure</i>. Everything is mirrored, and a dot adjacent to its own mate is always joined.</p>
-    <p class="pw-note"><b>Face-like</b> seats one dot two thirds of the way across and a third of the way down, and lets the mirror turn it into a pair of eyes. What makes them read as eyes is that they carry no connections, so the accent colour is reserved for them and the body chains use only the other two. Any other dot left unconnected is joined to a neighbour, taking that neighbour's colour if need be, or given a neighbour of its own. A dot exactly on the midline is exempt, having no symmetry mate.</p>
-    <p class="pw-note"><b>Rectilinear</b> keeps the square grid: each colour grows outward from a single cell on the mirror line, so no colour is ever split into islands. <i>Density</i> sets how much of the half-grid to fill and the colours divide that between them; the growth rule loosens as density climbs, or the dial would saturate around half fill. A third shape is seeded on the mirror line too — the one place it can sit without its own reflection becoming a second, disconnected island — so it appears whenever it can be had without floaters.</p>
-    <p class="pw-note">Circular dots are joined by two circular fillets tangent to both. The <i>Waist</i> dial sets the neck as a fraction of the dot's diameter and the fillet radius is solved to match, so the arc always leaves the circumference tangentially and the joint never develops a corner — until at 1 the pinch vanishes and the connector is a straight bar as wide as the dots. <b>Hexagon</b> dots share the lattice's own orientation, a flat side facing each of the six neighbours, and their connector is always as wide as the hexagon is tall, vertex to vertex.</p>
-    <p class="pw-note">Colour combinations begin from Nanoidenticons but a good number leave a dot too near the background in luminance. Each is repaired on first use by moving lightness alone, hues and saturations untouched, aiming for a 5.5 contrast ratio against its ground and never falling below 3.5. <b>Transparent</b> drops the background entirely; the host surface named by <b>On dark</b> then acts as the ground, and combinations whose dots wouldn't clear it are filtered out rather than altered.</p>
+    <p class="pw-note"><b>Hexagonal</b> Stealthicons are the official style. They are laid out on a hexagonal grid, like a honeycomb, with the honeycomb hexagons laid on their sides, forming rows. Each dot on that grid lies at the center of a hexagon. Hexagonal Stealthicon sizes can be expressed by either odd or even numbers, and the number determines the layout (row lengths). For even numbers, the rows are n−1, n, n−1 … — for example, if the number is 4 (n = 4), the rows are 3, 4, 3, 4. For odd numbers the rows are n−2, n−1, n, n−1, n … — for example, for n = 5, the rows are 3, 4, 5, 4, 5. Dots may be connected by "waists," which are drawn to create smooth curves. The result is "chains" that originate from the midline (the vertical line of symmetry of the image) and grow outward. Chains take root on the midline and walk outward, extending with probability <code>D / (1 + steps/W)</code> so they thin as they lengthen; each dot may bifurcate once; adjacent leaves of one color then close with probability <code>Closure</code>. Everything is mirrored, and a dot adjacent to its own mate is always joined.</p>
+    <p class="pw-note"><b>Face-like</b> Stealthicons have one dot two thirds of the way across the image and a third of the way down. The mirror symmetry around the midline turns this dot into a pair of eyes. These dots carry no connections, are rendered in the accent color, and any other dot left unconnected is joined to a neighbor, taking that neighbor's color. If these lone dots have no neighbors, one will be created. A dot exactly on the midline is exempt from requiring a connection to a neighbor, having no symmetry mate. These constraints make the two mirror dots look strikingly like eyes, giving face-like icons a distinctive personality.</p>
+    <p class="pw-note"><b>Rectilinear</b> Stealthicons have the square grid (instead of the hexagonal grid). Each color chain grows outward from a single cell on the mirror line, so no color is ever split into islands. <code>Density</code> sets how much of the grid to fill. The density is divided between the various foreground colors of the image. The growth rule loosens as density climbs, or the image would stop growing chains at about half-full. A third shape in a third foreground color is seeded on the mirror line too, the one place it can sit without its own reflection becoming a second, disconnected island, so it appears whenever it can, given that it won't create isolated dots.</p>
+    <p class="pw-note">Circular dots are joined by two circular fillets tangent to both dots. The <code>Waist</code> slider sets the neck as a fraction of the dot's diameter and the so-called fillet radius is solved such that the arc always leaves the circumference tangentially. This means the connection never develops a corner. When the <code>Waist</code> slider is 1, the connections are a straight bar as wide as the dot diameter. <code>Hexagon</code> dots share the lattice's own orientation, wherein their flat sides face each of their six neighbors. Hexagon connectors are as wide as the hexagon is tall, which is the distance from one vertex to the vertex diametrically across the hexagon.</p>
+    <p class="pw-note">Color combinations are generated for this project: a base hue at a 15° step, the two dot hues offset by a classic harmony angle, and saturation and lightness drawn from a small curated set. Each one already clears a 5.5 contrast ratio against its own background before it's ever used; the repair step is a safety net, moving lightness alone — hues and saturations untouched — and never letting contrast fall below 3.5. <code>Transparent</code> drops the background entirely. The setting named <code>On dark</code> excludes palettes whose foreground colors don't have enough contrast on a dark background; leaving this option off excludes palettes whose foreground colors don't have enough contrast on a light background. The <code>Transparent</code> setting is a huge decision, and probably not advisable unless you have a very good reason. It commits your project to using either light backgrounds or dark backgrounds for your Stealthicons, which can be extra work to manage.</p>
   </section>
 
   <section class="pw-section">
@@ -440,8 +465,8 @@
       <span id="grindmeta">—</span>
     </div>
     <div id="grind" class="st-grind"></div>
-    <p class="pw-note">The mark is seeded from a single 128-bit slice of the digest, so however much variety a generator would spend, the count can never exceed 2<sup>128</sup> — which the rectilinear 8×8 already reaches and the hexagonal 8×8 comes within range of. Past that point a larger grid buys detail, not distinctness.</p>
-    <p class="pw-note">A forger needs an address whose stealthicon passes for yours: the same name, and a mark close enough to fool a glance. The name and the mark are independent draws from the same digest, so their bits add. Each attempt costs one full Argon2d evaluation — timed in this browser, on this machine — and the memory cost is what stops that being parallelised away cheaply: at the current setting every lane needs its own working memory, so an attacker buys lanes with RAM rather than with cores.</p>
+    <p class="pw-note">The Stealthicon image is seeded from a single 128-bit slice of the cryptographic digest, which puts an upper limit on the variety of Stealthicon images: 2<sup>128</sup>, or 340 trillion trillion trillion. The practical consequence is that Stealthicons never need to be bigger than 8×8. Larger images can have more detail, but no more distinctness, and therefore no more security. Bear in mind that 8×8 is exceedingly secure.</p>
+    <p class="pw-note">To successfully fool a Stealthicon user into sending to the wrong address, a forger needs to grind (1) an address that passes for yours (not difficult), (2) the same name (somewhat difficult), and (3) a Stealthicon image close enough to fool the user at a glance (practically impossible). The name and the Stealthicon image are independently derived from the same data, so their difficulty doesn't simply add; it multiplies. Each attempt costs one full memory-hard Argon2d hash, which is well over one tenth of a second on a modern computer. Even more computing power helps little, because the memory cost prevents cheap parallelization. In other words, an attacker buys lanes with RAM rather than with cores.</p>
   </section>
 
   <section class="pw-section">
@@ -475,7 +500,7 @@
       <thead><tr><th>Step</th><th>Divisor</th><th>Remainder</th><th>Bits</th><th>Result</th></tr></thead>
       <tbody id="steps"><tr><td colspan="5" style="color:var(--muted)">Type something above.</td></tr></tbody>
     </table>
-    <p class="pw-note" id="note">The name is drawn from the low bits of the digest by repeated <code>divmod</code>. The first division picks the shape — vowel-first or consonant-first — and the next five pick the letters.</p>
+    <p class="pw-note" id="note">The name is drawn from the first 64 bits of the memory-hard Argon2d cryptographic digest, spent low-order bit first by repeated <code>divmod</code>. The first division picks the so-called "shape" (vowel-first or consonant-first) and the next five pick the letters, such that they match the shape.</p>
   </section>
 
   <section class="pw-section">
@@ -484,8 +509,10 @@
       <span id="budget">—</span>
     </div>
     <p class="pw-hex" id="hex">Waiting for text.</p>
+    <div class="pw-segs" id="segs"></div>
     <div class="pw-strip" id="strip"></div>
     <div class="pw-scale"><span>bit 0</span><span id="legend">every bit of the digest, and what spends it</span><span id="lastbit">bit 255</span></div>
+    <p class="pw-note"><b>The numbering counts position, not significance.</b> <code>bit 0</code> is the digest's first, most-significant bit — bytes run left to right in the order the hash produced them, and within each byte the most significant bit comes first, so the least significant bit of any byte sits at the <i>right</i> edge of its 8-cell group. A value's low-order bits are therefore never near <code>bit 0</code>; they sit at the right edge of whichever window that value is drawn from — which is why the name's used bits hug the boundary with <code>mark seed</code> instead of the left edge of the strip.</p>
   </section>
 
   <section class="pw-section">
@@ -522,13 +549,13 @@
       </select>
     </div>
     </div>
-    <p class="pw-note">These sit at the bottom because they are the settings you are least likely to touch, not because they matter least — they are the whole basis of the grind cost above. The defaults are chosen to keep a single evaluation fast enough that this page stays responsive while still costing an attacker real memory for every guess. Argon2d runs with the fixed salt <code>stealthicons-v1</code>: a stealthicon has to be a pure function of its address, so there is nothing per-user to vary, and the cost parameters carry the defence instead. Typing is debounced while it is selected, and the digest is cached so moving a mark dial doesn't re-hash.</p>
+    <p class="pw-note">These settings sit at the bottom because they are the settings you are least likely to touch, not because they are least important — they establish the grind cost described above. The defaults are chosen to keep a single evaluation fast enough that this page stays responsive while still costing a forger real memory and computational power for every guess. Argon2d runs with the fixed salt <code>stealthicons-v1</code>, so a stealthicon has to be solely a function of its address. Nothing varies from user to user, and the cost parameters carry the defense instead. Typing the address text is debounced to prevent a laggy user interface, and the digest is cached so changing a setting doesn't trigger a new Argon2d calculation, which could also cause lag.</p>
   </section>
 
   <p class="pw-foot">
-    Name and mark both derive from the digest alone, so a stealthicon is a pure function of its text.<br>
-    Hashing happens in your browser — Web Crypto for the SHA family, a bundled Argon2 for the memory-hard option. Nothing you type leaves the page.<br>
-    Colour combinations begin from Nanoidenticons (keerifox, WTFPL) and are repaired for contrast before use; the generators here are original.
+    The pseudoword name and Stealthicon image both derive from the Argon2d digest alone, so a Stealthicon is a pure function of its text.<br>
+    On this page, hashing happens in your browser. The SHA family comes from Web Crypto. The memory-hard option (default) is a bundled Argon2 implementation. Nothing you type leaves the page.<br>
+    Color combinations and generators are both original to this project.
   </p>
 
   <div class="pw-modal" id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modaltitle">
@@ -564,6 +591,7 @@
     steps: document.getElementById("steps"),
     note: document.getElementById("note"),
     hex: document.getElementById("hex"),
+    segs: document.getElementById("segs"),
     strip: document.getElementById("strip"),
     budget: document.getElementById("budget"),
     legend: document.getElementById("legend"),
@@ -718,6 +746,24 @@
     }
     el.strip.innerHTML = "";
     el.strip.appendChild(frag);
+
+    // The strip below shows every individual bit, but the name's window is
+    // mostly unused padding that reads identically to genuinely-unread bits.
+    // Draw the three real regions as sized, labelled blocks so the boundary
+    // at bit 0 (not bit ~46) is visible without doing the arithmetic.
+    var winPct = Math.min(total, 64) / total * 100;
+    var seedStartPct = Math.min(total, SEED_LO) / total * 100;
+    var seedEndPct = Math.min(total, SEED_HI) / total * 100;
+    var segsHtml = '<div class="pw-seg v" style="left:0%;width:' + winPct.toFixed(2) + '%">name window</div>';
+    if (seedEndPct > seedStartPct){
+      segsHtml += '<div class="pw-seg c" style="left:' + seedStartPct.toFixed(2) + '%;width:' +
+                  (seedEndPct - seedStartPct).toFixed(2) + '%">mark seed</div>';
+    }
+    if (seedEndPct < 100){
+      segsHtml += '<div class="pw-seg p" style="left:' + seedEndPct.toFixed(2) + '%;width:' +
+                  (100 - seedEndPct).toFixed(2) + '%">unread</div>';
+    }
+    el.segs.innerHTML = segsHtml;
 
     var seedBits = Math.min(total, SEED_HI) - Math.min(total, SEED_LO);
     el.hex.innerHTML = "<mark>" + hex.slice(0, 16) + "</mark>" + hex.slice(16, 48) +
@@ -907,6 +953,7 @@
     el.namemeta.textContent = "—";
     el.budget.textContent = "—";
     el.hex.textContent = "Waiting for text.";
+    el.segs.innerHTML = "";
     el.strip.innerHTML = "";
     el.steps.innerHTML = '<tr><td colspan="5" style="color:var(--muted)">Type something above.</td></tr>';
     el.iconmeta.textContent = "waiting for text";

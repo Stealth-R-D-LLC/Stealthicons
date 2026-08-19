@@ -1,8 +1,9 @@
-# superseded prototype, kept locally for reference only (see HANDOFF.md)
-_legacy
-_bak
-_blockies
-_samples
+# local-only scratch/reference directories (prototypes, backups, working
+# notes, generated review artifacts, deploy docs, etc.) — anything at the
+# repo root starting with an underscore. Trailing slash keeps this to
+# directories only, since leading-underscore *files* are sometimes part of
+# real JS project layouts (see the individual file exceptions below).
+/_*/
 
 # OS / editor
 .DS_Store
@@ -17,3 +18,6 @@ _buignore
 
 # vim backup
 *~
+
+# hidden files
+.*

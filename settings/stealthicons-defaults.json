@@ -40,7 +40,7 @@
     "faceLike": false,
     "walk": {
       "density": 0.75,
-      "persistence": 3,
+      "persistence": 2,
       "maxChain": 6,
       "closure": 0.5,
       "spotShare": 0.5
